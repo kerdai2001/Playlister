@@ -2,10 +2,10 @@ import { createContext, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import jsTPS from '../common/jsTPS'
 import api from './store-request-api'
-import CreateSong_Transaction from '../transactions/CreateSong_Transaction'
+import AddSong_Transaction from '../transactions/AddSong_Transaction'
 import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
 import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
-import UpdateSong_Transaction from '../transactions/UpdateSong_Transaction'
+import EditSong_Transaction from '../transactions/EditSong_Transaction'
 import AuthContext from '../auth'
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -223,30 +223,31 @@ function GlobalStoreContextProvider(props) {
         // GET THE LIST
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
-            if (response.data.success) {
-                let playlist = response.data.playlist;
-                playlist.name = newName;
-                async function updateList(playlist) {
-                    response = await api.updatePlaylistById(playlist._id, playlist);
-                    if (response.data.success) {
-                        async function getListPairs(playlist) {
-                            response = await api.getPlaylistPairs();
-                            if (response.data.success) {
-                                let pairsArray = response.data.idNamePairs;
-                                storeReducer({
-                                    type: GlobalStoreActionType.CHANGE_LIST_NAME,
-                                    payload: {
-                                        idNamePairs: pairsArray,
-                                        playlist: playlist
-                                    }
-                                });
-                            }
+            
+            if(!response.data.success) return;
+
+            let playlist = response.data.playlist;
+            playlist.name = newName;
+            async function updateList(playlist) {
+                response = await api.updatePlaylistById(playlist._id, playlist);
+                if(!response.data.success) return;
+
+                async function getListPairs(playlist) {
+                    response = await api.getPlaylistPairs();
+                    if(!response.data.success) return;
+
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                        payload: {
+                            idNamePairs: pairsArray,
+                            playlist: playlist
                         }
-                        getListPairs(playlist);
-                    }
+                    });
                 }
-                updateList(playlist);
+                getListPairs(playlist);
             }
+            updateList(playlist);
         }
         asyncChangeListName(id);
     }
@@ -385,27 +386,41 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentList(id);
     }
 
-    store.getPlaylistSize = function() {
-        return store.currentList.songs.length;
-    }
+    // TRANSACTIONS ////////////////////////////////
+
     store.addNewSong = function() {
-        let index = this.getPlaylistSize();
-        this.addCreateSongTransaction(index, "Untitled", "?", "dQw4w9WgXcQ");
-    }
-    // THIS FUNCTION CREATES A NEW SONG IN THE CURRENT LIST
-    // USING THE PROVIDED DATA AND PUTS THIS SONG AT INDEX
-    store.createSong = function(index, song) {
-        let list = store.currentList;      
-        list.songs.splice(index, 0, song);
-        // NOW MAKE IT OFFICIAL
+        let playlist = store.currentList;
+        playlist.songs.push({title: "Untitled", artist: "Unknown", youTubeId: "dQw4w9WgXcQ"});
         store.updateCurrentList();
     }
-    // THIS FUNCTION MOVES A SONG IN THE CURRENT LIST FROM
-    // start TO end AND ADJUSTS ALL OTHER ITEMS ACCORDINGLY
+
+    store.removeNewSong = function() {
+        let playlist = store.currentList;
+        playlist.songs.pop();
+        store.updateCurrentList();
+    }
+
+    store.removeSong = function(index) {
+        let playlist = store.currentList;
+        playlist.songs.splice(index, 1); 
+        store.updateCurrentList();
+    }
+
+    store.addSong = function(index, song) {
+        let playlist = store.currentList;
+        playlist.songs.splice(index, 0, song);
+        store.updateCurrentList();
+    }
+
+    store.editSong = function(index, song) {
+        let playlist = store.currentList;
+        playlist.songs[index] = song;
+        store.updateCurrentList();
+    }
+
     store.moveSong = function(start, end) {
         let list = store.currentList;
 
-        // WE NEED TO UPDATE THE STATE FOR THE APP
         if (start < end) {
             let temp = list.songs[start];
             for (let i = start; i < end; i++) {
@@ -421,66 +436,36 @@ function GlobalStoreContextProvider(props) {
             list.songs[end] = temp;
         }
 
-        // NOW MAKE IT OFFICIAL
         store.updateCurrentList();
     }
-    // THIS FUNCTION REMOVES THE SONG AT THE index LOCATION
-    // FROM THE CURRENT LIST
-    store.removeSong = function(index) {
-        let list = store.currentList;      
-        list.songs.splice(index, 1); 
+    
+    store.addAddNewSongTransaction = function() {
+        let transaction = new AddSong_Transaction(store);
+        tps.addTransaction(transaction);
+    }
 
-        // NOW MAKE IT OFFICIAL
-        store.updateCurrentList();
+    store.addRemoveSongTransaction = function() {
+        let transaction = new RemoveSong_Transaction(store, store.songIndex, store.currentList.songs[store.songIndex]);
+        tps.addTransaction(transaction);
+        store.hideRemoveSongModal();
     }
-    // THIS FUNCTION UPDATES THE TEXT IN THE ITEM AT index TO text
-    store.updateSong = function(index, songData) {
-        let list = store.currentList;
-        let song = list.songs[index];
-        song.title = songData.title;
-        song.artist = songData.artist;
-        song.youTubeId = songData.youTubeId;
 
-        // NOW MAKE IT OFFICIAL
-        store.updateCurrentList();
-    }
-    store.addNewSong = () => {
-        let playlistSize = store.getPlaylistSize();
-        store.addCreateSongTransaction(
-            playlistSize, "Untitled", "?", "dQw4w9WgXcQ");
-    }
-    // THIS FUNCDTION ADDS A CreateSong_Transaction TO THE TRANSACTION STACK
-    store.addCreateSongTransaction = (index, title, artist, youTubeId) => {
-        // ADD A SONG ITEM AND ITS NUMBER
-        let song = {
-            title: title,
-            artist: artist,
-            youTubeId: youTubeId
-        };
-        let transaction = new CreateSong_Transaction(store, index, song);
-        tps.addTransaction(transaction);
-    }    
-    store.addMoveSongTransaction = function (start, end) {
-        let transaction = new MoveSong_Transaction(store, start, end);
-        tps.addTransaction(transaction);
-    }
-    // THIS FUNCTION ADDS A RemoveSong_Transaction TO THE TRANSACTION STACK
-    store.addRemoveSongTransaction = () => {
-        let index = store.currentSongIndex;
+    store.addEditSongTransaction = function (index, newSong) {
         let song = store.currentList.songs[index];
-        let transaction = new RemoveSong_Transaction(store, index, song);
-        tps.addTransaction(transaction);
-    }
-    store.addUpdateSongTransaction = function (index, newSongData) {
-        let song = store.currentList.songs[index];
-        let oldSongData = {
+        let oldSong = {
             title: song.title,
             artist: song.artist,
             youTubeId: song.youTubeId
         };
-        let transaction = new UpdateSong_Transaction(this, index, oldSongData, newSongData);        
+        let transaction = new EditSong_Transaction(store, index, oldSong, newSong);
         tps.addTransaction(transaction);
     }
+
+    store.addMoveSongTransaction = function (start, end) {
+        let transaction = new MoveSong_Transaction(store, start, end);
+        tps.addTransaction(transaction);
+    }
+
     store.updateCurrentList = function() {
         async function asyncUpdateCurrentList() {
             const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
@@ -498,9 +483,6 @@ function GlobalStoreContextProvider(props) {
     }
     store.redo = function () {
         tps.doTransaction();
-    }
-    store.canAddNewSong = function() {
-        return (store.currentList !== null);
     }
     store.canUndo = function() {
         return ((store.currentList !== null) && tps.hasTransactionToUndo());

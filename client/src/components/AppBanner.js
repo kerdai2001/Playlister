@@ -49,6 +49,7 @@ export default function AppBanner() {
             }}
             open={isMenuOpen}
             onClose={handleMenuClose}
+            disableScrollLock
         >
             <Link to='/login/'><MenuItem onClick={handleMenuClose}>Login</MenuItem></Link>
             <Link to='/register/'><MenuItem onClick={handleMenuClose}>Create Account</MenuItem></Link>

@@ -1,5 +1,4 @@
 import logo from '../img/logo.png';
-import { Stack, Button } from '@mui/material/';
 
 export default function SplashScreen() {
 

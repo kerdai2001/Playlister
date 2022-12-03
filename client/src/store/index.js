@@ -259,6 +259,7 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });
         tps.clearAllTransactions();
+        history.push("/");
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -491,6 +492,11 @@ function GlobalStoreContextProvider(props) {
     store.redo = function () {
         tps.doTransaction();
     }
+
+    store.canAddNewSong = function() {
+        return (store.currentList !== null);
+    }
+
     store.canUndo = function() {
         return ((store.currentList !== null) && tps.hasTransactionToUndo());
     }

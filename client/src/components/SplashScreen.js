@@ -9,7 +9,7 @@ export default function SplashScreen() {
             <h1 style={{fontSize: "48pt"}}>Welcome to Playlister</h1>
             <p style={{fontSize: "24pt"}}>A place to create and share your favorite playlists.</p>
 
-            <Stack direction="column" alignItems="center" justifyContent={"center"}>
+            <Stack direction="column" alignItems="center">
                 <Button variant="contained" href='/login/' sx={{width: 200, margin: 1}}>Login</Button>
                 <Button variant="contained" href='/register/' sx={{width: 200, margin: 1}}>Create Account</Button>
                 <Button variant="contained" href='/login/' sx={{width: 200, margin: 1}}>Continue as Guest</Button>

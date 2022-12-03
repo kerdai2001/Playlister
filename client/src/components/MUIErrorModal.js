@@ -33,6 +33,7 @@ export default function MUIErrorModal() {
                 <Box textAlign='center'>
                     <Button
                         variant='contained'
+                        sx={{marginTop: 2}}
                         onClick={() => {
                             store.closeError();
                         }}

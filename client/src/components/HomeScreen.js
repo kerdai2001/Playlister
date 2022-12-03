@@ -13,7 +13,10 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
 import SortIcon from '@mui/icons-material/Sort';
 import {Box, IconButton, TextField} from '@mui/material/';
+
 import WorkspaceScreen from './WorkspaceScreen';
+import Statusbar from './Statusbar';
+
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -59,7 +62,8 @@ const HomeScreen = () => {
                         aria-label="add"
                         id="add-list-button"
                         onClick={handleCreateNewList}
-                        disabled={store.currentList}
+                        disabled={store.currentList != null}
+                        size="medium"
                     >
                         <AddIcon />
                     </Fab>
@@ -81,6 +85,7 @@ const HomeScreen = () => {
                     }
                     <MUIDeleteModal />
                 </div>
+                <Statusbar />
             </div>
         </div>
     )

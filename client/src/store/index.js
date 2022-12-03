@@ -76,7 +76,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: payload.playlist,
+                    currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -240,8 +240,7 @@ function GlobalStoreContextProvider(props) {
                     storeReducer({
                         type: GlobalStoreActionType.CHANGE_LIST_NAME,
                         payload: {
-                            idNamePairs: pairsArray,
-                            playlist: playlist
+                            idNamePairs: pairsArray
                         }
                     });
                 }
@@ -260,6 +259,7 @@ function GlobalStoreContextProvider(props) {
         });
         tps.clearAllTransactions();
         history.push("/");
+        store.loadIdNamePairs();
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -455,7 +455,7 @@ function GlobalStoreContextProvider(props) {
     store.addRemoveSongTransaction = function() {
         let transaction = new RemoveSong_Transaction(store, store.songIndex, store.currentList.songs[store.songIndex]);
         tps.addTransaction(transaction);
-        store.hideRemoveSongModal();
+        store.hideModals();
     }
 
     store.addEditSongTransaction = function (index, newSong) {

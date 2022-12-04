@@ -161,6 +161,14 @@ body {
   text-align: left;
 }
 
+#youtube-player-buttons {
+  position: absolute;
+  top: 82%;
+  left: 60%;
+  width: 40%;
+  text-align: center;
+}
+
 #list-selector-list {
   position: absolute;
   left: 0%;

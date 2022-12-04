@@ -7,6 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import WorkspaceScreen from './WorkspaceScreen';
+
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -20,7 +23,7 @@ function ListCard(props) {
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
 
-    function handleLoadList(event, id) {
+    function handleLoadList(event, id, expand) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
             let _id = event.target.id;
@@ -30,8 +33,16 @@ function ListCard(props) {
             console.log("load " + event.target.id);
 
             // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
+            store.setCurrentList(id, expand);
         }
+    }
+
+    function handleToggleExpand(event, id, expand) {
+        event.stopPropagation();
+        if(store.currentList != null && store.currentList._id == idNamePair._id)
+            store.toggleListExpanded();
+        else
+            handleLoadList(event, id, expand);
     }
 
     function handleToggleEdit(event) {
@@ -75,7 +86,15 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+
+    let workspace = null;
+    if(store.currentList != null && store.currentList._id == idNamePair._id && store.listExpanded)
+    {
+        workspace = <WorkspaceScreen />;
+    }
+
     let cardElement =
+        <div>
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
@@ -83,7 +102,7 @@ function ListCard(props) {
             style={{ fontSize: '24pt' }}
             button
             onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
+                handleLoadList(event, idNamePair._id, false)
             }}
         >
             <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
@@ -99,7 +118,17 @@ function ListCard(props) {
                     <DeleteIcon style={{fontSize:'24pt'}} />
                 </IconButton>
             </Box>
+            <Box sx={{ p: 1 }}>
+                <IconButton
+                onClick={(event) => {handleToggleExpand(event, idNamePair._id, true)}}
+                aria-label='expand'
+                >
+                    <KeyboardDoubleArrowDownIcon style={{fontSize:'24pt'}} />
+                </IconButton>
+            </Box>
         </ListItem>
+        {workspace}
+        </div>
 
     if (editActive) {
         cardElement =

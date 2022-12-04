@@ -14,6 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
+import logo from '../img/logo.png';
+
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
@@ -76,10 +78,12 @@ export default function AppBanner() {
         </Menu>        
 
     let editToolbar = "";
+    let homeButton = <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>;
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
         editToolbar = <EditToolbar />;
+        homeButton = <img src={logo} width={140} height={46} style={{marginTop: 8}}/>;
     }
     
     function getAccountMenu(loggedIn) {
@@ -101,7 +105,7 @@ export default function AppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
+                        {homeButton}
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

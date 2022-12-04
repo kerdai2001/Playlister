@@ -2,6 +2,13 @@ import React, {useContext} from 'react';
 import YouTube from 'react-youtube';
 import { GlobalStoreContext } from '../store'
 
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import StopIcon from '@mui/icons-material/Stop';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+
+import {Box, IconButton, Typography} from '@mui/material/';
+
 export default function YouTubePlayer() {
     const { store } = useContext(GlobalStoreContext);
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
@@ -14,6 +21,8 @@ export default function YouTubePlayer() {
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let currentSong = store.youTubeCurrentSong;
+
+    let playerRef = "";
 
     const playerOptions = {
         height: '240',
@@ -32,16 +41,10 @@ export default function YouTubePlayer() {
         player.playVideo();
     }
 
-    // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
-    function incSong() {
-        currentSong++;
-        currentSong = currentSong % playlist.length;
-        store.youTubeSetCurrentSong(currentSong);
-    }
-
     function onPlayerReady(event) {
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
+        playerRef = event.target;
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -57,7 +60,7 @@ export default function YouTubePlayer() {
         } else if (playerStatus === 0) {
             // THE VIDEO HAS COMPLETED PLAYING
             console.log("0 Video ended");
-            incSong();
+            store.nextSong();
             loadAndPlayCurrentSong(player);
         } else if (playerStatus === 1) {
             // THE VIDEO IS PLAYED
@@ -74,9 +77,39 @@ export default function YouTubePlayer() {
         }
     }
 
-    return <YouTube
-        videoId={playlist[currentSong]}
-        opts={playerOptions}
-        onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange} />;
+    function pauseSong() {
+        playerRef.pauseVideo();
+    }
+
+    function resumeSong() {
+        playerRef.playVideo();
+    }
+
+    return (
+        <div>
+            <Box id="youtube-player">
+                <YouTube
+                videoId={playlist[currentSong]}
+                opts={playerOptions}
+                onReady={onPlayerReady}
+                onStateChange={onPlayerStateChange} />
+                <Typography sx={{fontWeight: 'bold'}}>Now Playing</Typography>
+            </Box>
+
+            <Box id="youtube-player-buttons">
+                <IconButton onClick={store.prevSong}>
+                    <FastRewindIcon sx={{fontSize: 40}}/>
+                </IconButton>
+                <IconButton onClick={pauseSong}>
+                    <StopIcon sx={{fontSize: 40}}/>
+                </IconButton>
+                <IconButton onClick={resumeSong}>
+                    <PlayArrowIcon sx={{fontSize: 40}}/>
+                </IconButton>
+                <IconButton onClick={store.nextSong}>
+                    <FastForwardIcon sx={{fontSize: 40}}/>
+                </IconButton>
+            </Box>
+        </div>
+    )
 }

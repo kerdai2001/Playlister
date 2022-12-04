@@ -12,6 +12,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
 import SortIcon from '@mui/icons-material/Sort';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import StopIcon from '@mui/icons-material/Stop';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+
 import {Box, IconButton, TextField} from '@mui/material/';
 
 import WorkspaceScreen from './WorkspaceScreen';
@@ -37,38 +42,37 @@ const HomeScreen = () => {
     let listCard = "";
     let youTubePlayer = "";
 
+    listCard = 
+        <List sx={{ bgcolor: 'background.paper' }}>
+        {
+            store.idNamePairs.map((pair) => (
+                <ListCard
+                    key={pair._id}
+                    idNamePair={pair}
+                    selected={false}
+                />
+            ))
+        }
+        </List>;
+
     if (store.currentList == null) {
-        listCard = 
-            <List sx={{ bgcolor: 'background.paper' }}>
-            {
-                store.idNamePairs.map((pair) => (
-                    <ListCard
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
-                    />
-                ))
-            }
-            </List>;
         youTubePlayer = "";
     }
     else
     {
-        listCard = <WorkspaceScreen />
+        //listCard = <WorkspaceScreen />
 
         if(store.currentList.songs.length > 0)
             youTubePlayer =
                 <div>
-                    <Box id="youtube-player">
-                        <YouTubePlayer />
-                        <Typography sx={{fontWeight: 'bold'}}>Now Playing</Typography>
-                    </Box>
+                    <YouTubePlayer />
                     <Box id="youtube-player-description" sx={{marginTop: 1}}>
                         <Typography>Playlist: {store.currentList == null ? "" : store.currentList.name}</Typography>
                         <Typography>Song: #{store.youTubeCurrentSong + 1}</Typography>
                         <Typography>Title: {store.currentList.songs[store.youTubeCurrentSong].title}</Typography>
                         <Typography>Artist: {store.currentList.songs[store.youTubeCurrentSong].artist}</Typography>
                     </Box>
+                    
                 </div>
     }
 

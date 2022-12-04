@@ -220,6 +220,18 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION PROCESSES CHANGING A LIST NAME
     store.changeListName = function (id, newName) {
+        // test for duplicate name
+        console.log(id);
+        for(let i = 0; i < store.idNamePairs.length; i++)
+        {
+            // name already exists in a different playlist
+            if(newName == store.idNamePairs[i].name && id != store.idNamePairs[i]._id)
+            {
+                auth.showError("Playlist with name " + newName + " already exists.");
+                return "error";
+            }
+        }
+
         // GET THE LIST
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
@@ -228,6 +240,7 @@ function GlobalStoreContextProvider(props) {
 
             let playlist = response.data.playlist;
             playlist.name = newName;
+
             async function updateList(playlist) {
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if(!response.data.success) return;
@@ -264,7 +277,21 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
-        let newListName = "Untitled" + store.newListCounter;
+        let number = store.newListCounter;
+        let newListName = "Untitled " + number;
+
+        for(let i = 0; i < store.idNamePairs.length; i++)
+        {
+            if(newListName == store.idNamePairs[i].name)
+            {
+                number++;
+                newListName = "Untitled " + number;
+                i = 0;
+            }
+        }
+
+        console.log(store.idNamePairs);
+
         const response = await api.createPlaylist(newListName, [], auth.user.email);
         console.log("createNewList response: " + response);
         if (response.status === 201) {

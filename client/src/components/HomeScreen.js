@@ -17,6 +17,7 @@ import {Box, IconButton, TextField} from '@mui/material/';
 import WorkspaceScreen from './WorkspaceScreen';
 import Statusbar from './Statusbar';
 import YouTubePlayer from './YouTubePlayer';
+import MUIErrorModal from './MUIErrorModal';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -56,6 +57,7 @@ const HomeScreen = () => {
 
     return (
         <div>
+            <MUIErrorModal />
             <div id="playlist-selector">
                 <div id="list-selector-heading">
                     <Fab 

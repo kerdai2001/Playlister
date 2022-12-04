@@ -60,15 +60,15 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.SHOW_ERROR: {
                 return setAuth({
-                    user: null,
-                    loggedIn: false,
+                    user: auth.user,
+                    loggedIn: auth.loggedIn,
                     error: payload.message
                 })
             }
             case AuthActionType.CLOSE_ERROR: {
                 return setAuth({
-                    user: null,
-                    loggedIn: false,
+                    user: auth.user,
+                    loggedIn: auth.loggedIn,
                     error: null
                 })
             }
@@ -106,10 +106,7 @@ function AuthContextProvider(props) {
         }
         catch(error)
         {
-            authReducer({
-                type: AuthActionType.SHOW_ERROR,
-                payload: {message: error.response.data.errorMessage}
-            })
+            auth.showError(error.response.data.errorMessage);
         }
     }
 
@@ -129,10 +126,7 @@ function AuthContextProvider(props) {
         }
         catch(error)
         {
-            authReducer({
-                type: AuthActionType.SHOW_ERROR,
-                payload: {message: error.response.data.errorMessage}
-            })
+            auth.showError(error.response.data.errorMessage);
         }
     }
 
@@ -155,6 +149,13 @@ function AuthContextProvider(props) {
         }
         console.log("user initials: " + initials);
         return initials;
+    }
+
+    auth.showError = function(message) {
+        authReducer({
+            type: AuthActionType.SHOW_ERROR,
+            payload: {message: message}
+        })
     }
 
     auth.closeError = function() {

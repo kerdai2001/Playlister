@@ -16,6 +16,7 @@ import {Box, IconButton, TextField} from '@mui/material/';
 
 import WorkspaceScreen from './WorkspaceScreen';
 import Statusbar from './Statusbar';
+import YouTubePlayer from './YouTubePlayer';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -85,6 +86,11 @@ const HomeScreen = () => {
                     }
                     <MUIDeleteModal />
                 </div>
+                
+                <div id="youtube-player">
+                    <YouTubePlayer />
+                </div>
+
                 <Statusbar />
             </div>
         </div>

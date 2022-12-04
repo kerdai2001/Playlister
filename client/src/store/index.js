@@ -452,10 +452,11 @@ function GlobalStoreContextProvider(props) {
         tps.addTransaction(transaction);
     }
 
-    store.addRemoveSongTransaction = function() {
-        let transaction = new RemoveSong_Transaction(store, store.songIndex, store.currentList.songs[store.songIndex]);
+    store.addRemoveSongTransaction = () => {
+        let index = store.currentSongIndex;
+        let song = store.currentList.songs[index];
+        let transaction = new RemoveSong_Transaction(store, index, song);
         tps.addTransaction(transaction);
-        store.hideModals();
     }
 
     store.addEditSongTransaction = function (index, newSong) {

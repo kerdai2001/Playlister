@@ -145,10 +145,18 @@ body {
   float: left;
 }
 
+#youtube-player {
+  position: absolute;
+  top: 30%;
+  left: 60%;
+  width: 40%;
+  text-align: center;
+}
+
 #list-selector-list {
   position: absolute;
   left: 0%;
-  width: 50%;
+  width: 60%;
   height: 70%;
   display: flex;
   flex-direction: column;

@@ -16,7 +16,7 @@ function EditToolbar() {
     const { store } = useContext(GlobalStoreContext);
 
     function handleAddNewSong() {
-        store.addNewSong();
+        store.addAddNewSongTransaction();
     }
     function handleUndo() {
         store.undo();

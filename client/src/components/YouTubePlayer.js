@@ -1,30 +1,26 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import YouTube from 'react-youtube';
+import { GlobalStoreContext } from '../store'
 
 export default function YouTubePlayer() {
+    const { store } = useContext(GlobalStoreContext);
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
     // DEMONSTRATES HOW TO IMPLEMENT A PLAYLIST THAT MOVES
     // FROM ONE SONG TO THE NEXT
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
-    let playlist = [
-        /*
-        "mqmxkGjow1A",
-        "8RbXIMZmVv8",
-        "8UbNbor3OqQ"
-        */
-    ];
+    let playlist = store.youTubePlaylist;
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
-    let currentSong = 0;
+    let currentSong = store.youTubeCurrentSong;
 
     const playerOptions = {
         height: '240',
         width: '480',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
-            autoplay: 0,
+            autoplay: 1,
         },
     };
 
@@ -40,6 +36,7 @@ export default function YouTubePlayer() {
     function incSong() {
         currentSong++;
         currentSong = currentSong % playlist.length;
+        store.youTubeSetCurrentSong(currentSong);
     }
 
     function onPlayerReady(event) {

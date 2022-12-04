@@ -35,6 +35,7 @@ const HomeScreen = () => {
         store.createNewList();
     }
     let listCard = "";
+    let youTubePlayer = "";
 
     if (store.currentList == null) {
         listCard = 
@@ -49,10 +50,26 @@ const HomeScreen = () => {
                 ))
             }
             </List>;
+        youTubePlayer = "";
     }
     else
     {
         listCard = <WorkspaceScreen />
+
+        if(store.currentList.songs.length > 0)
+            youTubePlayer =
+                <div>
+                    <Box id="youtube-player">
+                        <YouTubePlayer />
+                        <Typography sx={{fontWeight: 'bold'}}>Now Playing</Typography>
+                    </Box>
+                    <Box id="youtube-player-description" sx={{marginTop: 1}}>
+                        <Typography>Playlist: {store.currentList == null ? "" : store.currentList.name}</Typography>
+                        <Typography>Song: #{store.youTubeCurrentSong + 1}</Typography>
+                        <Typography>Title: {store.currentList.songs[store.youTubeCurrentSong].title}</Typography>
+                        <Typography>Artist: {store.currentList.songs[store.youTubeCurrentSong].artist}</Typography>
+                    </Box>
+                </div>
     }
 
     return (
@@ -89,9 +106,7 @@ const HomeScreen = () => {
                     <MUIDeleteModal />
                 </div>
                 
-                <div id="youtube-player">
-                    <YouTubePlayer />
-                </div>
+                {youTubePlayer}
 
                 <Statusbar />
             </div>

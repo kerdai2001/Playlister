@@ -30,7 +30,8 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    YOUTUBE_SET_CURRENT_SONG: "YOUTUBE_SET_CURRENT_SONG"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -56,7 +57,9 @@ function GlobalStoreContextProvider(props) {
         newListCounter: 0,
         listNameActive: false,
         listIdMarkedForDeletion: null,
-        listMarkedForDeletion: null
+        listMarkedForDeletion: null,
+        youTubePlaylist: [],
+        youTubeCurrentSong: 0
     });
     const history = useHistory();
 
@@ -82,7 +85,9 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -96,7 +101,9 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: [],
+                    youTubeCurrentSong: 0
                 })
             }
             // CREATE A NEW LIST
@@ -110,7 +117,9 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter + 1,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -124,7 +133,9 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -138,7 +149,9 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
-                    listMarkedForDeletion: payload.playlist
+                    listMarkedForDeletion: payload.playlist,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong
                 });
             }
             // UPDATE A LIST
@@ -146,13 +159,15 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    currentList: payload.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: payload.youTubePlaylist,
+                    youTubeCurrentSong: payload.youTubeCurrentSong
                 });
             }
             // START EDITING A LIST NAME
@@ -166,7 +181,9 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: true,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong
                 });
             }
             // 
@@ -180,7 +197,9 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
@@ -193,7 +212,9 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -206,7 +227,24 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong
+                });
+            }
+            case GlobalStoreActionType.YOUTUBE_SET_CURRENT_SONG: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: payload.youTubeCurrentSong
                 });
             }
             default:
@@ -225,7 +263,7 @@ function GlobalStoreContextProvider(props) {
         for(let i = 0; i < store.idNamePairs.length; i++)
         {
             // name already exists in a different playlist
-            if(newName == store.idNamePairs[i].name && id != store.idNamePairs[i]._id)
+            if(newName === store.idNamePairs[i].name && id !== store.idNamePairs[i]._id)
             {
                 auth.showError("Playlist with name " + newName + " already exists.");
                 return "error";
@@ -282,7 +320,7 @@ function GlobalStoreContextProvider(props) {
 
         for(let i = 0; i < store.idNamePairs.length; i++)
         {
-            if(newListName == store.idNamePairs[i].name)
+            if(newListName === store.idNamePairs[i].name)
             {
                 number++;
                 newListName = "Untitled " + number;
@@ -408,11 +446,18 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
 
+                var youTubePlaylist = [];
+                for(let i = 0; i < playlist.songs.length; i++)
+                    youTubePlaylist.push(playlist.songs[i].youTubeId);
+
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if (response.data.success) {
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: playlist
+                        payload: {
+                            currentList: playlist,
+                            youTubePlaylist:youTubePlaylist,
+                            youTubeCurrentSong: 0 }
                     });
                     history.push("/playlist/" + playlist._id);
                 }
@@ -505,10 +550,18 @@ function GlobalStoreContextProvider(props) {
     store.updateCurrentList = function() {
         async function asyncUpdateCurrentList() {
             const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+
+            var youTubePlaylist = [];
+                for(let i = 0; i < store.currentList.songs.length; i++)
+                    youTubePlaylist.push(store.currentList.songs[i].youTubeId);
+
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
-                    payload: store.currentList
+                    payload: {
+                        currentList: store.currentList,
+                        youTubePlaylist: youTubePlaylist,
+                        youTubeCurrentSong: store.youTubeCurrentSong}
                 });
             }
         }
@@ -540,6 +593,15 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
             payload: null
+        });
+    }
+
+    // YOUTUBE ////////////////////////////////
+
+    store.youTubeSetCurrentSong = function(index) {
+        storeReducer({
+            type: GlobalStoreActionType.YOUTUBE_SET_CURRENT_SONG,
+            payload: {youTubeCurrentSong: index}
         });
     }
 

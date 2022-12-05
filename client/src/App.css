@@ -128,11 +128,6 @@ body {
 }
 
 #list-selector-heading {
-  position: absolute;
-  left: 30%;
-  top: 0%;
-  width: 40%;
-  height: 10%;
   text-align: center;
   font-size: 24pt;
   font-weight: bold;
@@ -143,6 +138,13 @@ body {
 
 #add-list-button {
   float: left;
+}
+
+#tabs {
+  top: 19%;
+  position: absolute;
+  left: 61%;
+  width: 40%;
 }
 
 #youtube-player {
@@ -182,10 +184,19 @@ body {
 .list-card,
 .selected-list-card,
 .unselected-list-card {
-  font-size: 18pt;
-  margin: 10px;
-  padding: 20px;
-  border-radius: 25px;
+  margin: 5px;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.player-current-song {
+  background-color: #a6deff;
+}
+
+.player-current-song:hover {
+  cursor: pointer;
+  background-color: var(--swatch-contrast);
+  color: white;
 }
 
 .list-card:aria-disabled,

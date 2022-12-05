@@ -1,6 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
+import { Fab, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
@@ -48,6 +52,10 @@ function SongCard(props) {
     }
 
     let cardClass = "list-card unselected-list-card";
+
+    if(store.youTubeCurrentSong == index)
+        cardClass = "list-card player-current-song";
+
     return (
         <div
             key={index}
@@ -60,29 +68,31 @@ function SongCard(props) {
             onDrop={handleDrop}
             draggable="true"
             onClick={handleClick}
+            style={{alignItems: 'center'}}
         >
-            {index + 1 + ". "}
-            <a
+            <Typography
                 id={'song-' + index + '-link'}
                 className="song-link"
-                //href={"https://www.youtube.com/watch?v=" + song.youTubeId}
-                >
+                display="inline">
+                {index + 1 + ". "}
                 {song.title} by {song.artist}
-            </a>
-            <input
-                type="button"
+            </Typography>
+            <Fab
                 id={"remove-song-" + index}
                 className="list-card-button"
-                value={"\u2715"}
                 onClick={handleRemoveSong}
-            />
-            <input
-                type="button"
+                sx={{padding: 0, marginTop: "-1%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
+                size="small">
+                    <CloseIcon sx={{fontSize: 30}}/>
+            </Fab>
+            <Fab
                 id={"edit-song-" + index}
                 className="list-card-button"
-                value={"\u{1F589}"}
                 onClick={handleEdit}
-            />
+                sx={{padding: 0, marginTop: "-1%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
+                size="small">
+                    <EditIcon sx={{fontSize: 30}}/>
+            </Fab>
         </div>
     );
 }

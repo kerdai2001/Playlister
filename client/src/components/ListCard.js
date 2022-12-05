@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import WorkspaceScreen from './WorkspaceScreen';
+import { Button } from '@mui/material';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -59,6 +60,13 @@ function ListCard(props) {
         setText(idNamePair.name);
     }
 
+    function handleClick(event) {
+        if(event.detail === 1 && !(store.currentList != null && store.currentList._id == idNamePair._id))
+            handleLoadList(event, idNamePair._id, false);
+        if(event.detail === 2)
+            handleToggleEdit(event);
+    }
+
     async function handleDeleteList(event, id) {
         event.stopPropagation();
         let _id = event.target.id;
@@ -90,11 +98,28 @@ function ListCard(props) {
     let workspace = null;
     if(store.currentList != null && store.currentList._id == idNamePair._id && store.listExpanded)
     {
-        workspace = <WorkspaceScreen />;
+        workspace =
+            <div>
+                <Button variant="contained"
+                    sx={{width: 100, margin: 1}}
+                    onClick={handleToggleEdit}>
+                        Publish
+                </Button>
+                <Button variant="contained"
+                    sx={{width: 100, margin: 1}}
+                    onClick={(event) => {handleDeleteList(event, idNamePair._id)}}>
+                        Delete
+                </Button>
+                <Button variant="contained"
+                    sx={{width: 100, margin: 1}}
+                    onClick={handleToggleEdit}>
+                        Duplicate
+                </Button>
+                <WorkspaceScreen />
+            </div>
     }
 
     let cardElement =
-        <div>
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
@@ -102,10 +127,11 @@ function ListCard(props) {
             style={{ fontSize: '24pt' }}
             button
             onClick={(event) => {
-                handleLoadList(event, idNamePair._id, false)
+                handleClick(event)
             }}
         >
             <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+            {/*
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
                     <EditIcon style={{fontSize:'24pt'}} />
@@ -118,6 +144,7 @@ function ListCard(props) {
                     <DeleteIcon style={{fontSize:'24pt'}} />
                 </IconButton>
             </Box>
+                */}
             <Box sx={{ p: 1 }}>
                 <IconButton
                 onClick={(event) => {handleToggleExpand(event, idNamePair._id, true)}}
@@ -127,8 +154,6 @@ function ListCard(props) {
                 </IconButton>
             </Box>
         </ListItem>
-        {workspace}
-        </div>
 
     if (editActive) {
         cardElement =
@@ -149,7 +174,10 @@ function ListCard(props) {
             />
     }
     return (
-        cardElement
+        <div>
+            {cardElement}
+            {workspace}
+        </div>
     );
 }
 

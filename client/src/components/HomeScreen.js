@@ -1,10 +1,8 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
 
@@ -12,14 +10,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
 import SortIcon from '@mui/icons-material/Sort';
-import FastRewindIcon from '@mui/icons-material/FastRewind';
-import StopIcon from '@mui/icons-material/Stop';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import FastForwardIcon from '@mui/icons-material/FastForward';
 
-import {Box, IconButton, TextField} from '@mui/material/';
+import {Box, IconButton, Tab, Tabs, TextField} from '@mui/material/';
 
-import WorkspaceScreen from './WorkspaceScreen';
 import Statusbar from './Statusbar';
 import YouTubePlayer from './YouTubePlayer';
 import MUIErrorModal from './MUIErrorModal';
@@ -36,9 +29,8 @@ const HomeScreen = () => {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
-        store.createNewList();
-    }
+    const [value, setValue] = useState(0);
+
     let listCard = "";
     let youTubePlayer = "";
 
@@ -55,45 +47,48 @@ const HomeScreen = () => {
         }
         </List>;
 
+    let tabs =
+        <Tabs value={value} onChange={(e, val) => setValue(val)}>
+            <Tab label="Player"/>
+            <Tab label="Comments"/>
+        </Tabs>
+    
     if (store.currentList == null) {
         youTubePlayer = "";
     }
     else
     {
-        //listCard = <WorkspaceScreen />
-
         if(store.currentList.songs.length > 0)
+        {
+            let currentTab = "";
+            if(tabs.props.value == 0)
+            {
+                currentTab =
+                    <div>
+                        <YouTubePlayer />
+                        <Box id="youtube-player-description" sx={{marginTop: 1}}>
+                            <Typography>Playlist: {store.currentList == null ? "" : store.currentList.name}</Typography>
+                            <Typography>Song: #{store.youTubeCurrentSong + 1}</Typography>
+                            <Typography>Title: {store.currentList.songs[store.youTubeCurrentSong].title}</Typography>
+                            <Typography>Artist: {store.currentList.songs[store.youTubeCurrentSong].artist}</Typography>
+                        </Box>
+                    </div>
+            }
+
             youTubePlayer =
                 <div>
-                    <YouTubePlayer />
-                    <Box id="youtube-player-description" sx={{marginTop: 1}}>
-                        <Typography>Playlist: {store.currentList == null ? "" : store.currentList.name}</Typography>
-                        <Typography>Song: #{store.youTubeCurrentSong + 1}</Typography>
-                        <Typography>Title: {store.currentList.songs[store.youTubeCurrentSong].title}</Typography>
-                        <Typography>Artist: {store.currentList.songs[store.youTubeCurrentSong].artist}</Typography>
+                    <Box id="tabs">
+                        {tabs}
                     </Box>
-                    
+                    {currentTab}
                 </div>
+        }
     }
 
     return (
         <div>
             <MUIErrorModal />
             <div id="playlist-selector">
-                <div id="list-selector-heading">
-                    <Fab 
-                        color="primary" 
-                        aria-label="add"
-                        id="add-list-button"
-                        onClick={handleCreateNewList}
-                        disabled={store.currentList != null}
-                        size="medium"
-                    >
-                        <AddIcon />
-                    </Fab>
-                    <Typography variant="h4">Your Lists</Typography>
-                </div>
-                
                 <Box sx={{padding: 1, display: "flex", alignItems: "center"}}>
                     <IconButton><HomeIcon sx={{fontSize: 40}}/></IconButton>
                     <IconButton><GroupsIcon sx={{fontSize: 40}}/></IconButton>

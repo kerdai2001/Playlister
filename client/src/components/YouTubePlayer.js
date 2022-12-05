@@ -22,8 +22,6 @@ export default function YouTubePlayer() {
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let currentSong = store.youTubeCurrentSong;
 
-    let playerRef = "";
-
     const playerOptions = {
         height: '240',
         width: '480',
@@ -44,7 +42,7 @@ export default function YouTubePlayer() {
     function onPlayerReady(event) {
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
-        playerRef = event.target;
+        store.initYouTubePlayer(event.target);
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -78,11 +76,11 @@ export default function YouTubePlayer() {
     }
 
     function pauseSong() {
-        playerRef.pauseVideo();
+        store.youTubePlayer.pauseVideo();
     }
 
     function resumeSong() {
-        playerRef.playVideo();
+        store.youTubePlayer.playVideo();
     }
 
     return (

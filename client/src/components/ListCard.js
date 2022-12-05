@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import WorkspaceScreen from './WorkspaceScreen';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -86,9 +86,9 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
-    let selectClass = "unselected-list-card";
-    if (selected) {
-        selectClass = "selected-list-card";
+    let selectClass = {fontSize: 24};
+    if (store.currentList != null && idNamePair.name == store.currentList.name) {
+        selectClass = {fontSize: 24, color: "#00a0ff"};
     }
     let cardStatus = false;
     if (store.isListNameEditActive) {
@@ -130,7 +130,9 @@ function ListCard(props) {
                 handleClick(event)
             }}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+            <Box sx={{ p: 1, flexGrow: 1 }}>
+                <Typography sx={selectClass}>{idNamePair.name}</Typography>
+            </Box>
             {/*
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>

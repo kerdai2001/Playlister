@@ -226,6 +226,35 @@ body {
   float: right;
 }
 
+.comment-card {
+  margin: 5px;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid #999999;
+  background-color: var(--swatch-complement);
+  pointer-events: none;
+}
+
+#comment-list {
+  position: absolute;
+  top: 27%;
+  left: 60%;
+  width: 40%;
+  height: 50%;
+  overflow-y: scroll;
+  background-color: var(--swatch-primary);
+}
+
+#comment-box {
+  position: absolute;
+  margin-bottom: 0.5%;
+  margin-left: 1%;
+  bottom: 10%;
+  left: 60%;
+  width: 38%;
+  background-color: var(--swatch-primary);
+}
+
 #workspace-home,
 #workspace-edit {
   position: absolute;

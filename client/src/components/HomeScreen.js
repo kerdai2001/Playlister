@@ -29,7 +29,20 @@ const HomeScreen = () => {
         store.loadIdNamePairs();
     }, []);
 
-    const [value, setValue] = useState(0);
+    const [tabValue, setTabValue] = useState(0);
+    const [commentText, setCommentText] = useState("");
+
+    function handleCommentKeyPress(event) {
+        if(event.code === "Enter" && commentText != "")
+        {
+            store.addComment(commentText);
+            setCommentText("");
+        }
+    }
+
+    function handleCommentChange(event) {
+        setCommentText(event.target.value);
+    }
 
     let listCard = "";
     let youTubePlayer = "";
@@ -48,7 +61,7 @@ const HomeScreen = () => {
         </List>;
 
     let tabs =
-        <Tabs value={value} onChange={(e, val) => setValue(val)}>
+        <Tabs value={tabValue} onChange={(e, val) => setTabValue(val)}>
             <Tab label="Player"/>
             <Tab label="Comments"/>
         </Tabs>
@@ -60,12 +73,12 @@ const HomeScreen = () => {
     {
         if(store.currentList.songs.length > 0)
         {
-            let currentTab = "";
+            let playerTab = "";
+            let commentTab = "";
             if(tabs.props.value == 0)
             {
-                currentTab =
+                playerTab =
                     <div>
-                        <YouTubePlayer />
                         <Box id="youtube-player-description" sx={{marginTop: 1}}>
                             <Typography>Playlist: {store.currentList == null ? "" : store.currentList.name}</Typography>
                             <Typography>Song: #{store.youTubeCurrentSong + 1}</Typography>
@@ -74,13 +87,49 @@ const HomeScreen = () => {
                         </Box>
                     </div>
             }
+            if(tabs.props.value == 1)
+            {
+                commentTab = 
+                    <Box>
+                        <List 
+                            id="comment-list" 
+                            sx={{ width: '100%'}}
+                        >
+                            {
+                                store.currentList.comments.map((comment, index) => (
+                                    <div
+                                    id={'comment-' + index}
+                                    key={'comment-' + index}
+                                    className={"comment-card"}
+                                    >
+                                        <Typography sx={{fontWeight: 'bold'}}>{comment.userName}</Typography>
+                                        <Typography>{comment.comment}</Typography>
+                                    </div>
+                                ))  
+                            }
+                        </List> 
+                        <div id="comment-box">
+                            <TextField
+                                value={commentText}
+                                onChange={handleCommentChange}
+                                onKeyPress={handleCommentKeyPress}
+                                id="outlined-basic"
+                                label="Add Comment"
+                                variant="outlined"
+                                sx={{width: "100%"}}
+                                />
+                        </div>
+                    </Box>
+            }
 
             youTubePlayer =
                 <div>
                     <Box id="tabs">
                         {tabs}
                     </Box>
-                    {currentTab}
+                    <YouTubePlayer />
+                    {playerTab}
+                    {commentTab}
                 </div>
         }
     }

@@ -7,10 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import WorkspaceScreen from './WorkspaceScreen';
 import { Button, Typography, Grid } from '@mui/material';
 
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
@@ -107,7 +108,7 @@ function ListCard(props) {
     }
 
     let selectClass = {fontSize: 24};
-    if (store.currentList != null && idNamePair.name == store.currentList.name) {
+    if (store.currentList != null && idNamePair._id == store.currentList._id) {
         selectClass = {fontSize: 24, color: "#00a0ff"};
     }
     let cardStatus = false;
@@ -116,8 +117,11 @@ function ListCard(props) {
     }
 
     let workspace = null;
+    let expandIcon = <ExpandMoreIcon style={{fontSize:'24pt'}} />;
     if(store.currentList != null && store.currentList._id == idNamePair._id && store.listExpanded)
     {
+        expandIcon = <ExpandLessIcon style={{fontSize:'24pt'}} />;
+
         workspace =
             <div>
                 <Button variant="contained"
@@ -128,7 +132,8 @@ function ListCard(props) {
                 </Button>
                 <Button variant="contained"
                     sx={{width: 100, margin: 1}}
-                    onClick={(event) => {handleDeleteList(event, idNamePair._id)}}>
+                    onClick={(event) => {handleDeleteList(event, idNamePair._id)}}
+                    disabled={store.currentView != 0}>
                         Delete
                 </Button>
                 <Button variant="contained"
@@ -223,7 +228,7 @@ function ListCard(props) {
                 onClick={(event) => {handleToggleExpand(event, idNamePair._id, true)}}
                 aria-label='expand'
                 >
-                    <KeyboardDoubleArrowDownIcon style={{fontSize:'24pt'}} />
+                    {expandIcon}
                 </IconButton>
             </Box>
         </ListItem>

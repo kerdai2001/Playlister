@@ -35,7 +35,8 @@ function SongCard(props) {
         setDraggedTo(false);
 
         // UPDATE THE LIST
-        store.addMoveSongTransaction(sourceIndex, targetIndex);
+        if(store.currentList.published == "")
+            store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
     function handleRemoveSong(event) {
         event.stopPropagation();

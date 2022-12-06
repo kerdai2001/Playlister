@@ -26,7 +26,16 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        console.log("check current view");
+        switch(store.currentView) {
+            case 0:
+                store.loadIdNamePairs();
+                break;
+            case 1:
+            case 2:
+                store.loadPublishedNamePairs();
+                break;
+        }
     }, []);
 
     const [tabValue, setTabValue] = useState(0);
@@ -50,14 +59,18 @@ const HomeScreen = () => {
         setMenuAnchor(null);
     }
 
-    function handleSortByEdit() {
-        store.sortByEdit();
+    function handleSortByUpdate() {
+        store.handleSortByUpdate();
         setMenuAnchor(null);
     }
 
     function handleSortByName() {
         store.sortByName();
         setMenuAnchor(null);
+    }
+
+    async function handleChangeView(index) {
+        store.changeView(index);
     }
 
     let listCard = "";
@@ -154,9 +167,15 @@ const HomeScreen = () => {
             <MUIErrorModal />
             <div id="playlist-selector">
                 <Box sx={{padding: 1, display: "flex", alignItems: "center"}}>
-                    <IconButton><HomeIcon sx={{fontSize: 40}}/></IconButton>
-                    <IconButton><GroupsIcon sx={{fontSize: 40}}/></IconButton>
-                    <IconButton><PersonIcon sx={{fontSize: 40}}/></IconButton>
+                    <IconButton onClick={() => {handleChangeView(0)}} color={store.currentView == 0? "primary" : "default"}>
+                        <HomeIcon sx={{fontSize: 40}}/>
+                    </IconButton>
+                    <IconButton onClick={() => {handleChangeView(1)}} color={store.currentView == 1? "primary" : "default"}>
+                        <GroupsIcon sx={{fontSize: 40}}/>
+                    </IconButton>
+                    <IconButton onClick={() => {handleChangeView(2)}} color={store.currentView == 2? "primary" : "default"}>
+                        <PersonIcon sx={{fontSize: 40}}/>
+                    </IconButton>
                     <TextField id="outlined-basic" label="Search" variant="outlined" sx={{marginLeft:"10%", width: "50%"}}/>
                     <Typography sx={{marginLeft: "15%"}}>Sort By</Typography>
                     <IconButton onClick={(e) => {setMenuAnchor(e.currentTarget)}}>
@@ -169,7 +188,7 @@ const HomeScreen = () => {
                         onClose={() => {setMenuAnchor(null)}}
                     >
                         <MenuItem onClick={handleSortByCreate}>By Creation Date (Old-New)</MenuItem>
-                        <MenuItem onClick={handleSortByEdit}>By Last Edit Date (Old-New)</MenuItem>
+                        <MenuItem onClick={handleSortByUpdate}>By Last Edit Date (Old-New)</MenuItem>
                         <MenuItem onClick={handleSortByName}>By Name (A-Z)</MenuItem>
                     </Menu>
                 </Box>

@@ -11,7 +11,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
 import SortIcon from '@mui/icons-material/Sort';
 
-import {Box, IconButton, Tab, Tabs, TextField} from '@mui/material/';
+import {Box, IconButton, Menu, MenuItem, Tab, Tabs, TextField} from '@mui/material/';
 
 import Statusbar from './Statusbar';
 import YouTubePlayer from './YouTubePlayer';
@@ -31,6 +31,7 @@ const HomeScreen = () => {
 
     const [tabValue, setTabValue] = useState(0);
     const [commentText, setCommentText] = useState("");
+    const [menuAnchor, setMenuAnchor] = useState(null);
 
     function handleCommentKeyPress(event) {
         if(event.code === "Enter" && commentText != "")
@@ -42,6 +43,21 @@ const HomeScreen = () => {
 
     function handleCommentChange(event) {
         setCommentText(event.target.value);
+    }
+
+    function handleSortByCreate() {
+        store.sortByCreate();
+        setMenuAnchor(null);
+    }
+
+    function handleSortByEdit() {
+        store.sortByEdit();
+        setMenuAnchor(null);
+    }
+
+    function handleSortByName() {
+        store.sortByName();
+        setMenuAnchor(null);
     }
 
     let listCard = "";
@@ -143,7 +159,19 @@ const HomeScreen = () => {
                     <IconButton><PersonIcon sx={{fontSize: 40}}/></IconButton>
                     <TextField id="outlined-basic" label="Search" variant="outlined" sx={{marginLeft:"10%", width: "50%"}}/>
                     <Typography sx={{marginLeft: "15%"}}>Sort By</Typography>
-                    <IconButton><SortIcon sx={{fontSize: 40}}/></IconButton>
+                    <IconButton onClick={(e) => {setMenuAnchor(e.currentTarget)}}>
+                        <SortIcon sx={{fontSize: 40}}/>
+                    </IconButton>
+                    <Menu
+                        anchorEl={menuAnchor}
+                        keepMounted
+                        open={Boolean(menuAnchor)}
+                        onClose={() => {setMenuAnchor(null)}}
+                    >
+                        <MenuItem onClick={handleSortByCreate}>By Creation Date (Old-New)</MenuItem>
+                        <MenuItem onClick={handleSortByEdit}>By Last Edit Date (Old-New)</MenuItem>
+                        <MenuItem onClick={handleSortByName}>By Name (A-Z)</MenuItem>
+                    </Menu>
                 </Box>
 
                 <div id="list-selector-list">

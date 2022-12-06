@@ -899,6 +899,36 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    store.sortByCreate = function() {
+        store.idNamePairs.sort(
+            function(x, y) {
+                if(x.createdAt < y.createdAt) return -1;
+                if(x.createdAt > y.createdAt) return 1;
+                return 0;
+            }
+        )
+    }
+
+    store.sortByEdit = function() {
+        store.idNamePairs.sort(
+            function(x, y) {
+                if(x.updatedAt < y.updatedAt) return -1;
+                if(x.updatedAt > y.updatedAt) return 1;
+                return 0;
+            }
+        )
+    }
+
+    store.sortByName = function() {
+        store.idNamePairs.sort(
+            function(x, y) {
+                if(x.name < y.name) return -1;
+                if(x.name > y.name) return 1;
+                return 0;
+            }
+        )
+    }
+
     return (
         <GlobalStoreContext.Provider value={{
             store

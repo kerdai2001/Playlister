@@ -141,7 +141,9 @@ getPlaylistPairs = async (req, res) => {
                             published: list.published,
                             likes: list.likes,
                             dislikes: list.dislikes,
-                            listens: list.listens
+                            listens: list.listens,
+                            createdAt: list.createdAt,
+                            updatedAt: list.updatedAt
                         };
                         pairs.push(pair);
                     }

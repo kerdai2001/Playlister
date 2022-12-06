@@ -56,13 +56,13 @@ function SongCard(props) {
     if(store.youTubeCurrentSong == index)
         cardClass = "list-card player-current-song";
 
-    let buttons = store.currentList.published ? "" :
+    let buttons = store.currentList.published != "" ? "" :
         <div>
             <Fab
                 id={"edit-song-" + index}
                 className="list-card-button"
                 onClick={handleEdit}
-                sx={{padding: 0, marginTop: "-1%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
+                sx={{padding: 0, marginTop: "-5%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
                 size="small">
                     <EditIcon sx={{fontSize: 30}}/>
             </Fab>
@@ -70,7 +70,7 @@ function SongCard(props) {
                 id={"remove-song-" + index}
                 className="list-card-button"
                 onClick={handleRemoveSong}
-                sx={{padding: 0, marginTop: "-1%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
+                sx={{padding: 0, marginTop: "-5%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
                 size="small">
                     <CloseIcon sx={{fontSize: 30}}/>
             </Fab>

@@ -11,6 +11,9 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import WorkspaceScreen from './WorkspaceScreen';
 import { Button, Typography, Grid } from '@mui/material';
 
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -69,6 +72,16 @@ function ListCard(props) {
         */
     }
 
+    function handleLike(event) {
+        event.stopPropagation();
+        store.addLike(idNamePair._id);
+    }
+
+    function handleDislike(event) {
+        event.stopPropagation();
+        store.addDislike(idNamePair._id);
+    }
+
     async function handleDeleteList(event, id) {
         event.stopPropagation();
         let _id = event.target.id;
@@ -105,7 +118,7 @@ function ListCard(props) {
                 <Button variant="contained"
                     sx={{width: 100, margin: 1}}
                     onClick={store.publishList}
-                    disabled={idNamePair.published}>
+                    disabled={idNamePair.published != ""}>
                         Publish
                 </Button>
                 <Button variant="contained"
@@ -122,36 +135,75 @@ function ListCard(props) {
             </div>
     }
 
-    let editButton = idNamePair.published ? "" : 
-        <Box sx={{ p: 1 }}>
+    let editButton = idNamePair.published != "" ? "" : 
+        <Box>
             <IconButton onClick={handleToggleEdit} aria-label='edit'>
                 <EditIcon style={{fontSize:'24pt'}} />
             </IconButton>
         </Box>;
 
+    let grid = "";
+    if(idNamePair.published == "")
+    {
+        grid =
+            <Grid container spacing={1} sx={{p: 0}}>
+                <Grid item xs={8}>
+                    <Typography sx={selectClass}>{idNamePair.name}</Typography>
+                </Grid>
+                <Grid item xs={8}>
+                    <Typography style={{fontSize: "12pt"}}>by <b>{idNamePair.userName}</b></Typography>
+                </Grid>
+            </Grid>
+
+    }
+    else
+    {
+        grid =
+            <Grid container spacing={1} sx={{p: 0}}>
+                <Grid item xs={8}>
+                    <Typography sx={selectClass}>{idNamePair.name}</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                    <Box sx={{display: "flex", alignItems: 'center'}}>
+                        <IconButton onClick={handleLike} aria-label='edit'>
+                            <ThumbUpIcon style={{fontSize:'16pt'}} />
+                        </IconButton>
+                        <Typography style={{fontSize: "12pt"}}>{idNamePair.likes}</Typography>
+                    </Box>
+                </Grid>
+                <Grid item xs={2}>
+                    <Box sx={{display: "flex", alignItems: 'center'}}>
+                        <IconButton onClick={handleDislike} aria-label='edit'>
+                            <ThumbDownIcon style={{fontSize:'16pt'}} />
+                        </IconButton>
+                        <Typography style={{fontSize: "12pt"}}>{idNamePair.dislikes}</Typography>
+                    </Box>
+                </Grid>
+                <Grid item xs={8}>
+                    <Typography style={{fontSize: "12pt"}}>by <b>{idNamePair.userName}</b></Typography>
+                </Grid>
+                <Grid item xs={6} style={{display: "inline-flex", whiteSpace: "pre"}}>
+                    <Typography style={{fontSize: "12pt"}}>Published: </Typography>
+                    <Typography style={{fontSize: "12pt", color: "green"}}>{idNamePair.published}</Typography>
+                </Grid>
+                <Grid item xs={6} style={{display: "inline-flex", whiteSpace: "pre"}}>
+                    <Typography style={{fontSize: "12pt"}}>Listens: </Typography>
+                    <Typography style={{fontSize: "12pt", color: "red"}}>{idNamePair.listens}</Typography>
+                </Grid>
+            </Grid>
+    }
+
     let cardElement =
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            style={{ fontSize: '24pt' }}
+            style={{ fontSize: '24pt', backgroundColor: "#CEE7FF", marginBottom: 5, borderRadius: 15, height: 120}}
             button
             onClick={(event) => {
                 handleClick(event)
             }}
         >
-            <Grid container spacing={2}>
-                <Grid item xs={8}>
-                    <Typography sx={selectClass}>{idNamePair.name}</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                    
-                </Grid>
-                <Grid item xs={8}>
-                    <Typography style={{fontSize: "12pt"}}>by {idNamePair.userName}</Typography>
-                </Grid>
-            </Grid>
-            
-            
+            {grid}
             {/*
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={(event) => {
@@ -162,7 +214,7 @@ function ListCard(props) {
             </Box>
                 */}
             {editButton}
-            <Box sx={{ p: 1 }}>
+            <Box>
                 <IconButton
                 onClick={(event) => {handleToggleExpand(event, idNamePair._id, true)}}
                 aria-label='expand'

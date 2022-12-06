@@ -60,21 +60,58 @@ const HomeScreen = () => {
         }
         </List>;
 
-    let tabs =
-        <Tabs value={tabValue} onChange={(e, val) => setTabValue(val)}>
-            <Tab label="Player"/>
-            <Tab label="Comments"/>
-        </Tabs>
+    let tabs = "";
+    let commentTab = "";
     
     if (store.currentList == null) {
         youTubePlayer = "";
     }
     else
     {
+        tabs =
+            <Tabs value={tabValue} onChange={(e, val) => setTabValue(val)}>
+                <Tab label="Player"/>
+                <Tab label="Comments"/>
+            </Tabs>
+
+        if(tabs.props.value == 1)
+        {
+            commentTab = 
+                <Box>
+                    <List 
+                        id="comment-list" 
+                        sx={{ width: '100%'}}
+                    >
+                        {
+                            store.currentList.comments.map((comment, index) => (
+                                <div
+                                id={'comment-' + index}
+                                key={'comment-' + index}
+                                className={"comment-card"}
+                                >
+                                    <Typography sx={{fontWeight: 'bold'}}>{comment.userName}</Typography>
+                                    <Typography>{comment.comment}</Typography>
+                                </div>
+                            ))  
+                        }
+                    </List> 
+                    <div id="comment-box">
+                        <TextField
+                            value={commentText}
+                            onChange={handleCommentChange}
+                            onKeyPress={handleCommentKeyPress}
+                            id="outlined-basic"
+                            label="Add Comment"
+                            variant="outlined"
+                            sx={{width: "100%"}}
+                            />
+                    </div>
+                </Box>
+        }
+
         if(store.currentList.songs.length > 0)
         {
             let playerTab = "";
-            let commentTab = "";
             if(tabs.props.value == 0)
             {
                 playerTab =
@@ -87,49 +124,11 @@ const HomeScreen = () => {
                         </Box>
                     </div>
             }
-            if(tabs.props.value == 1)
-            {
-                commentTab = 
-                    <Box>
-                        <List 
-                            id="comment-list" 
-                            sx={{ width: '100%'}}
-                        >
-                            {
-                                store.currentList.comments.map((comment, index) => (
-                                    <div
-                                    id={'comment-' + index}
-                                    key={'comment-' + index}
-                                    className={"comment-card"}
-                                    >
-                                        <Typography sx={{fontWeight: 'bold'}}>{comment.userName}</Typography>
-                                        <Typography>{comment.comment}</Typography>
-                                    </div>
-                                ))  
-                            }
-                        </List> 
-                        <div id="comment-box">
-                            <TextField
-                                value={commentText}
-                                onChange={handleCommentChange}
-                                onKeyPress={handleCommentKeyPress}
-                                id="outlined-basic"
-                                label="Add Comment"
-                                variant="outlined"
-                                sx={{width: "100%"}}
-                                />
-                        </div>
-                    </Box>
-            }
 
             youTubePlayer =
                 <div>
-                    <Box id="tabs">
-                        {tabs}
-                    </Box>
                     <YouTubePlayer />
                     {playerTab}
-                    {commentTab}
                 </div>
         }
     }
@@ -154,8 +153,11 @@ const HomeScreen = () => {
                     <MUIDeleteModal />
                 </div>
                 
+                <Box id="tabs">
+                    {tabs}
+                </Box>
                 {youTubePlayer}
-
+                {commentTab}
                 <Statusbar />
             </div>
         </div>

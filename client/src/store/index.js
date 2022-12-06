@@ -338,9 +338,9 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     youTubePlaylist: payload.youTubePlaylist,
-                    youTubeCurrentSong: store.youTubeCurrentSong,
+                    youTubeCurrentSong: payload.youTubeCurrentSong,
                     youTubePlayer: store.youTubePlayer,
-                    listExpanded: store.listExpanded
+                    listExpanded: payload.listExpanded
                 });
             }
             default:
@@ -580,7 +580,12 @@ function GlobalStoreContextProvider(props) {
                             let pairsArray = response.data.idNamePairs;
                             storeReducer({
                                 type: GlobalStoreActionType.ADD_LISTEN,
-                                payload: {idNamePairs: pairsArray, currentList: playlist, youTubePlaylist: youTubePlaylist}
+                                payload: {
+                                    idNamePairs: pairsArray,
+                                    currentList: playlist,
+                                    youTubePlaylist: youTubePlaylist,
+                                    youTubeCurrentSong: 0,
+                                    listExpanded: expand}
                             });
                         }
                     }
@@ -852,6 +857,46 @@ function GlobalStoreContextProvider(props) {
             updateList(playlist);
         }
         asyncAddDislike(id);
+    }
+
+    store.duplicateList = async function (playlist) {
+        let number = 1;
+        let newListName = playlist.name;
+
+        for(let i = 0; i < store.idNamePairs.length; i++)
+        {
+            if(newListName === store.idNamePairs[i].name)
+            {
+                number++;
+                newListName = playlist.name + " " + number;
+                i = 0;
+            }
+        }
+
+        let response = await api.createPlaylist(
+            newListName,
+            playlist.songs,
+            auth.user.email,
+            [],
+            auth.user.userName,
+            "",
+            0, 0, 0);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            let newList = response.data.playlist;
+
+            async function asyncLoadIdNamePairs() {
+                response = await api.getPlaylistPairs();
+                if (response.data.success) {
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.CREATE_NEW_LIST,
+                        payload: {currentList: newList, idNamePairs: pairsArray}
+                    });
+                }
+            }
+            asyncLoadIdNamePairs(); 
+        }
     }
 
     return (

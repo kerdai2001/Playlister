@@ -82,6 +82,11 @@ function ListCard(props) {
         store.addDislike(idNamePair._id);
     }
 
+    function handleDuplicate(event) {
+        event.stopPropagation();
+        store.duplicateList(store.currentList);
+    }
+
     async function handleDeleteList(event, id) {
         event.stopPropagation();
         let _id = event.target.id;
@@ -128,7 +133,7 @@ function ListCard(props) {
                 </Button>
                 <Button variant="contained"
                     sx={{width: 100, margin: 1}}
-                    onClick={handleToggleEdit}>
+                    onClick={handleDuplicate}>
                         Duplicate
                 </Button>
                 <WorkspaceScreen />
@@ -154,7 +159,6 @@ function ListCard(props) {
                     <Typography style={{fontSize: "12pt"}}>by <b>{idNamePair.userName}</b></Typography>
                 </Grid>
             </Grid>
-
     }
     else
     {

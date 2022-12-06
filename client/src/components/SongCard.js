@@ -56,6 +56,26 @@ function SongCard(props) {
     if(store.youTubeCurrentSong == index)
         cardClass = "list-card player-current-song";
 
+    let buttons = store.currentList.published ? "" :
+        <div>
+            <Fab
+                id={"edit-song-" + index}
+                className="list-card-button"
+                onClick={handleEdit}
+                sx={{padding: 0, marginTop: "-1%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
+                size="small">
+                    <EditIcon sx={{fontSize: 30}}/>
+            </Fab>
+            <Fab
+                id={"remove-song-" + index}
+                className="list-card-button"
+                onClick={handleRemoveSong}
+                sx={{padding: 0, marginTop: "-1%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
+                size="small">
+                    <CloseIcon sx={{fontSize: 30}}/>
+            </Fab>
+        </div>;
+
     return (
         <div
             key={index}
@@ -77,22 +97,7 @@ function SongCard(props) {
                 {index + 1 + ". "}
                 {song.title} by {song.artist}
             </Typography>
-            <Fab
-                id={"remove-song-" + index}
-                className="list-card-button"
-                onClick={handleRemoveSong}
-                sx={{padding: 0, marginTop: "-1%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
-                size="small">
-                    <CloseIcon sx={{fontSize: 30}}/>
-            </Fab>
-            <Fab
-                id={"edit-song-" + index}
-                className="list-card-button"
-                onClick={handleEdit}
-                sx={{padding: 0, marginTop: "-1%", marginRight: 1, boxShadow: "none", border: 1, borderColor: "gray"}}
-                size="small">
-                    <EditIcon sx={{fontSize: 30}}/>
-            </Fab>
+            {buttons}
         </div>
     );
 }

@@ -33,7 +33,8 @@ export const GlobalStoreActionType = {
     HIDE_MODALS: "HIDE_MODALS",
     YOUTUBE_SET_CURRENT_SONG: "YOUTUBE_SET_CURRENT_SONG",
     INIT_YOUTUBE_PLAYER: "INIT_YOUTUBE_PLAYER",
-    EXPAND_CURRENT_LIST: "EXPAND_CURRENT_LIST"
+    EXPAND_CURRENT_LIST: "EXPAND_CURRENT_LIST",
+    RELOAD_ID_NAME_PAIRS: "RELOAD_ID_NAME_PAIRS"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -307,6 +308,23 @@ function GlobalStoreContextProvider(props) {
                     listExpanded: store.listExpanded
                 });
             }
+            case GlobalStoreActionType.RELOAD_ID_NAME_PAIRS: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: payload,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    youTubePlaylist: store.youTubePlaylist,
+                    youTubeCurrentSong: store.youTubeCurrentSong,
+                    youTubePlayer: store.youTubePlayer,
+                    listExpanded: store.listExpanded
+                });
+            }
             default:
                 return store;
         }
@@ -388,7 +406,13 @@ function GlobalStoreContextProvider(props) {
             }
         }
 
-        const response = await api.createPlaylist(newListName, [], auth.user.email, []);
+        const response = await api.createPlaylist(
+            newListName,
+            [],
+            auth.user.email,
+            [],
+            auth.user.userName,
+            false);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -698,6 +722,39 @@ function GlobalStoreContextProvider(props) {
     store.addComment = function(text) {
         store.currentList.comments.push({ userName: auth.user.userName, comment: text });
         store.updateCurrentList();
+    }
+
+    store.publishList = function() {
+        store.currentList.published = true;
+        store.reloadList();
+    }
+
+    store.reloadList = function() {
+        async function asyncUpdateCurrentList() {
+            let response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+            if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: {
+                        currentList: store.currentList,
+                        youTubePlaylist: store.youTubePlaylist,
+                        youTubeCurrentSong: store.youTubeCurrentSong,
+                        listExpanded: store.listExpanded}
+                });
+                async function asyncReloadIdNamePairs() {
+                    response = await api.getPlaylistPairs();
+                    if (response.data.success) {
+                        let pairsArray = response.data.idNamePairs;
+                        storeReducer({
+                            type: GlobalStoreActionType.RELOAD_ID_NAME_PAIRS,
+                            payload: pairsArray
+                        });
+                    }
+                }
+                asyncReloadIdNamePairs();
+            }
+        }
+        asyncUpdateCurrentList();
     }
 
     return (

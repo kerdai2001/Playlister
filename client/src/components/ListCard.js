@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import WorkspaceScreen from './WorkspaceScreen';
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, Grid } from '@mui/material';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -63,8 +63,10 @@ function ListCard(props) {
     function handleClick(event) {
         if(event.detail === 1 && !(store.currentList != null && store.currentList._id == idNamePair._id))
             handleLoadList(event, idNamePair._id, false);
+        /*
         if(event.detail === 2)
             handleToggleEdit(event);
+        */
     }
 
     async function handleDeleteList(event, id) {
@@ -102,7 +104,8 @@ function ListCard(props) {
             <div>
                 <Button variant="contained"
                     sx={{width: 100, margin: 1}}
-                    onClick={handleToggleEdit}>
+                    onClick={store.publishList}
+                    disabled={idNamePair.published}>
                         Publish
                 </Button>
                 <Button variant="contained"
@@ -119,26 +122,37 @@ function ListCard(props) {
             </div>
     }
 
+    let editButton = idNamePair.published ? "" : 
+        <Box sx={{ p: 1 }}>
+            <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                <EditIcon style={{fontSize:'24pt'}} />
+            </IconButton>
+        </Box>;
+
     let cardElement =
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ display: 'flex', p: 1 }}
             style={{ fontSize: '24pt' }}
             button
             onClick={(event) => {
                 handleClick(event)
             }}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>
-                <Typography sx={selectClass}>{idNamePair.name}</Typography>
-            </Box>
+            <Grid container spacing={2}>
+                <Grid item xs={8}>
+                    <Typography sx={selectClass}>{idNamePair.name}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                    
+                </Grid>
+                <Grid item xs={8}>
+                    <Typography style={{fontSize: "12pt"}}>by {idNamePair.userName}</Typography>
+                </Grid>
+            </Grid>
+            
+            
             {/*
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'24pt'}} />
-                </IconButton>
-            </Box>
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={(event) => {
                         handleDeleteList(event, idNamePair._id)
@@ -147,6 +161,7 @@ function ListCard(props) {
                 </IconButton>
             </Box>
                 */}
+            {editButton}
             <Box sx={{ p: 1 }}>
                 <IconButton
                 onClick={(event) => {handleToggleExpand(event, idNamePair._id, true)}}

@@ -136,7 +136,9 @@ getPlaylistPairs = async (req, res) => {
                         let list = playlists[key];
                         let pair = {
                             _id: list._id,
-                            name: list.name
+                            name: list.name,
+                            userName: list.userName,
+                            published: list.published
                         };
                         pairs.push(pair);
                     }
@@ -193,6 +195,8 @@ updatePlaylist = async (req, res) => {
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
                     list.comments = body.playlist.comments;
+                    list.userName = body.playlist.userName;
+                    list.published = body.playlist.published;
                     list
                         .save()
                         .then(() => {

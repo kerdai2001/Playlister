@@ -1181,7 +1181,7 @@ function GlobalStoreContextProvider(props) {
     store.changeView = function(index) {
         store.closeCurrentList();
         async function asyncLoadIdNamePairs() {
-            let response = index ? await api.getPublishedPlaylists() : await api.getPlaylistPairs();
+            let response = index > 0 || store.isGuest() ? await api.getPublishedPlaylists() : await api.getPlaylistPairs();
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
                 storeReducer({

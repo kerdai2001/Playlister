@@ -203,7 +203,7 @@ function AuthContextProvider(props) {
     }
 
     auth.isGuest = function() {
-        return auth.user.email == "" || auth.user.email == null;
+        return auth.user == null || auth.user.email == "" || auth.user.email == null;
     }
 
     return (

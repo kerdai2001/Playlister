@@ -187,7 +187,7 @@ loginGuest = async (req, res) => {
     try {
         
         // LOGIN THE USER
-        const token = auth.signToken("guest");
+        const token = auth.signToken();
         console.log(token);
 
         res.cookie("token", token, {

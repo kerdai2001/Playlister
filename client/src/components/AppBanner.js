@@ -35,6 +35,11 @@ export default function AppBanner() {
         auth.logoutUser();
     }
 
+    const handleLogoutGuest = () => {
+        handleMenuClose();
+        auth.logoutGuest();
+    }
+
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -53,9 +58,8 @@ export default function AppBanner() {
             onClose={handleMenuClose}
             disableScrollLock
         >
-            <Link to='/login/'><MenuItem onClick={handleMenuClose}>Login</MenuItem></Link>
-            <Link to='/register/'><MenuItem onClick={handleMenuClose}>Create Account</MenuItem></Link>
-            <Link to='/login/'><MenuItem onClick={handleMenuClose}>Continue as Guest</MenuItem></Link>
+            <Link to='/login/'><MenuItem onClick={handleLogoutGuest}>Login</MenuItem></Link>
+            <Link to='/register/'><MenuItem onClick={handleLogoutGuest}>Create Account</MenuItem></Link>
         </Menu>
     );
     const loggedInMenu = 
@@ -80,8 +84,10 @@ export default function AppBanner() {
     let editToolbar = "";
     let homeButton = <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>;
     let menu = loggedOutMenu;
-    if (auth.loggedIn) {
-        menu = loggedInMenu;
+    
+    if(auth.loggedIn) menu = loggedInMenu;
+
+    if (auth.loggedIn || (auth.user && auth.isGuest())) {
         editToolbar = <EditToolbar />;
         homeButton = <img src={logo} width={140} height={46} style={{marginTop: 8}}/>;
     }
@@ -89,7 +95,7 @@ export default function AppBanner() {
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
         console.log("userInitials: " + userInitials);
-        if (loggedIn) 
+        if (loggedIn && !auth.isGuest())
             return <div>{userInitials}</div>;
         else
             return <AccountCircle />;

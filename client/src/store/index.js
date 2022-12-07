@@ -87,7 +87,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: store.currentList,
+                    currentList: payload.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -389,8 +389,10 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION PROCESSES CHANGING A LIST NAME
     store.changeListName = function (id, newName) {
+
+        if(newName == "") return;
+
         // test for duplicate name
-        console.log(id);
         for(let i = 0; i < store.idNamePairs.length; i++)
         {
             // name already exists in a different playlist
@@ -414,7 +416,7 @@ function GlobalStoreContextProvider(props) {
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if(!response.data.success) return;
 
-                async function getListPairs(playlist) {
+                async function getListPairs() {
                     response = await api.getPlaylistPairs();
                     if(!response.data.success) return;
 
@@ -422,11 +424,12 @@ function GlobalStoreContextProvider(props) {
                     storeReducer({
                         type: GlobalStoreActionType.CHANGE_LIST_NAME,
                         payload: {
-                            idNamePairs: pairsArray
+                            idNamePairs: pairsArray,
+                            currentList: playlist
                         }
                     });
                 }
-                getListPairs(playlist);
+                getListPairs();
             }
             updateList(playlist);
         }
@@ -441,7 +444,7 @@ function GlobalStoreContextProvider(props) {
         });
         tps.clearAllTransactions();
         //history.push("/");
-        store.loadIdNamePairs();
+        //store.loadIdNamePairs();
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -610,7 +613,7 @@ function GlobalStoreContextProvider(props) {
                     if(!response.data.success) return;
 
                     async function asyncReloadIdNamePairs() {
-                        response = store.currentView ? await api.getPublishedPlaylists() : await api.getPlaylistPairs();
+                        response = store.currentView == 0 ? await api.getPlaylistPairs() : await api.getPublishedPlaylists();
                         if (response.data.success) {
                             let pairsArray = response.data.idNamePairs;
                             storeReducer({
@@ -801,7 +804,10 @@ function GlobalStoreContextProvider(props) {
         store.updateCurrentList();
     }
 
-    store.reloadList = function() {
+    store.publishList = function() {
+        tps.clearAllTransactions();
+        store.currentList.published = (new Date()).toLocaleString('en-us', {year:"numeric", month:"short", day:"numeric"});
+        
         async function asyncUpdateCurrentList() {
             let response = await api.updatePlaylistById(store.currentList._id, store.currentList);
             if (response.data.success) {
@@ -829,12 +835,6 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateCurrentList();
     }
 
-    store.publishList = function() {
-        tps.clearAllTransactions();
-        store.currentList.published = (new Date()).toLocaleString('en-us', {year:"numeric", month:"short", day:"numeric"});
-        store.reloadList();
-    }
-
     store.addLike = function(id) {
         async function asyncAddLike(id) {
             let response = await api.getPlaylistById(id);
@@ -849,7 +849,7 @@ function GlobalStoreContextProvider(props) {
                 if(!response.data.success) return;
 
                 async function asyncReloadIdNamePairs() {
-                    response = store.currentView ? await api.getPublishedPlaylists() : await api.getPlaylistPairs();
+                    response = store.currentView == 0 ? await api.getPlaylistPairs() : await api.getPublishedPlaylists();
                     if (response.data.success) {
                         let pairsArray = response.data.idNamePairs;
                         storeReducer({
@@ -879,7 +879,7 @@ function GlobalStoreContextProvider(props) {
                 if(!response.data.success) return;
 
                 async function asyncReloadIdNamePairs() {
-                    response = store.currentView ? await api.getPublishedPlaylists() : await api.getPlaylistPairs();
+                    response = store.currentView == 0 ? await api.getPlaylistPairs() : await api.getPublishedPlaylists();
                     if (response.data.success) {
                         let pairsArray = response.data.idNamePairs;
                         storeReducer({
@@ -993,6 +993,10 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncLoadIdNamePairs();
+    }
+
+    store.isGuest = function() {
+        return auth.isGuest();
     }
 
     return (

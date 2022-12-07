@@ -12,7 +12,8 @@ export const AuthActionType = {
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
     SHOW_ERROR: "SHOW_ERROR",
-    CLOSE_ERROR: "CLOSE_ERROR"
+    CLOSE_ERROR: "CLOSE_ERROR",
+    LOGIN_GUEST: "LOGIN_GUEST"
 }
 
 function AuthContextProvider(props) {
@@ -70,6 +71,13 @@ function AuthContextProvider(props) {
                     user: auth.user,
                     loggedIn: auth.loggedIn,
                     error: null
+                })
+            }
+            case AuthActionType.LOGIN_GUEST: {
+                return setAuth({
+                    user: payload.user,
+                    loggedIn: false,
+                    errorMessage: null
                 })
             }
             default:
@@ -144,6 +152,8 @@ function AuthContextProvider(props) {
     auth.getUserInitials = function() {
         let initials = "";
         if (auth.user) {
+            if(auth.isGuest()) return "";
+
             initials += auth.user.firstName.charAt(0);
             initials += auth.user.lastName.charAt(0);
         }
@@ -163,6 +173,37 @@ function AuthContextProvider(props) {
             type: AuthActionType.CLOSE_ERROR,
             payload: null
         })
+    }
+
+    auth.loginGuest = async function() {
+        try
+        {
+            const response = await api.loginGuest();
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_GUEST,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+            }
+        }
+        catch(error)
+        {
+            auth.showError(error.response.data.errorMessage);
+        }
+    }
+
+    auth.logoutGuest = function() {
+        authReducer({
+            type: AuthActionType.LOGOUT_USER,
+            payload: null
+        })
+    }
+
+    auth.isGuest = function() {
+        return auth.user.email == "";
     }
 
     return (

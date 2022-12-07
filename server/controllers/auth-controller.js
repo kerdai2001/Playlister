@@ -182,9 +182,38 @@ registerUser = async (req, res) => {
     }
 }
 
+loginGuest = async (req, res) => {
+    console.log("loginGuest");
+    try {
+        
+        // LOGIN THE USER
+        const token = auth.signToken("guest");
+        console.log(token);
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: true
+        }).status(200).json({
+            success: true,
+            user: {
+                userName: "guest",
+                firstName: "",
+                lastName: "",
+                email: ""
+            }
+        })
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
 module.exports = {
     getLoggedIn,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    loginGuest
 }

@@ -26,10 +26,9 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
 
     useEffect(() => {
-        console.log("check current view");
         switch(store.currentView) {
             case 0:
-                store.loadIdNamePairs();
+                store.isGuest() ? store.changeView(1) : store.loadIdNamePairs();
                 break;
             case 1:
             case 2:
@@ -133,6 +132,7 @@ const HomeScreen = () => {
                             label="Add Comment"
                             variant="outlined"
                             sx={{width: "100%"}}
+                            disabled={store.isGuest()}
                             />
                     </div>
                 </Box>
@@ -167,7 +167,10 @@ const HomeScreen = () => {
             <MUIErrorModal />
             <div id="playlist-selector">
                 <Box sx={{padding: 1, display: "flex", alignItems: "center"}}>
-                    <IconButton onClick={() => {handleChangeView(0)}} color={store.currentView == 0? "primary" : "default"}>
+                    <IconButton
+                        onClick={() => {handleChangeView(0)}}
+                        color={store.currentView == 0? "primary" : "default"}
+                        disabled={store.isGuest()}>
                         <HomeIcon sx={{fontSize: 40}}/>
                     </IconButton>
                     <IconButton onClick={() => {handleChangeView(1)}} color={store.currentView == 1? "primary" : "default"}>

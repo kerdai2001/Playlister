@@ -20,7 +20,7 @@ function Statusbar() {
     let text ="";
     if (store.currentList)
         text = <Typography variant="h4">{store.currentList.name}</Typography>
-    else
+    else if(!store.isGuest())
     {
         text =
             <div id="list-selector-heading">

@@ -83,6 +83,11 @@ function ListCard(props) {
         store.addDislike(idNamePair._id);
     }
 
+    function handlePublish(event) {
+        event.stopPropagation();
+        store.publishList();
+    }
+
     function handleDuplicate(event) {
         event.stopPropagation();
         store.duplicateList(store.currentList);
@@ -126,7 +131,7 @@ function ListCard(props) {
             <div>
                 <Button variant="contained"
                     sx={{width: 100, margin: 1}}
-                    onClick={store.publishList}
+                    onClick={handlePublish}
                     disabled={idNamePair.published != ""}>
                         Publish
                 </Button>
@@ -138,7 +143,8 @@ function ListCard(props) {
                 </Button>
                 <Button variant="contained"
                     sx={{width: 100, margin: 1}}
-                    onClick={handleDuplicate}>
+                    onClick={handleDuplicate}
+                    disabled={store.isGuest()}>
                         Duplicate
                 </Button>
                 <WorkspaceScreen />
@@ -174,7 +180,7 @@ function ListCard(props) {
                 </Grid>
                 <Grid item xs={2}>
                     <Box sx={{display: "flex", alignItems: 'center'}}>
-                        <IconButton onClick={handleLike} aria-label='edit'>
+                        <IconButton onClick={handleLike} aria-label='edit' disabled={store.isGuest()}>
                             <ThumbUpIcon style={{fontSize:'16pt'}} />
                         </IconButton>
                         <Typography style={{fontSize: "12pt"}}>{idNamePair.likes}</Typography>
@@ -182,7 +188,7 @@ function ListCard(props) {
                 </Grid>
                 <Grid item xs={2}>
                     <Box sx={{display: "flex", alignItems: 'center'}}>
-                        <IconButton onClick={handleDislike} aria-label='edit'>
+                        <IconButton onClick={handleDislike} aria-label='edit' disabled={store.isGuest()}>
                             <ThumbDownIcon style={{fontSize:'16pt'}} />
                         </IconButton>
                         <Typography style={{fontSize: "12pt"}}>{idNamePair.dislikes}</Typography>

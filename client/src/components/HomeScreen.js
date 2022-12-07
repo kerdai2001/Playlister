@@ -40,6 +40,7 @@ const HomeScreen = () => {
     const [tabValue, setTabValue] = useState(0);
     const [commentText, setCommentText] = useState("");
     const [menuAnchor, setMenuAnchor] = useState(null);
+    const [searchText, setSearchText] = useState("");
 
     function handleCommentKeyPress(event) {
         if(event.code === "Enter" && commentText != "")
@@ -54,22 +55,45 @@ const HomeScreen = () => {
     }
 
     function handleSortByCreate() {
-        store.sortByCreate();
+        store.setSort(0, store.idNamePairs);
         setMenuAnchor(null);
     }
 
     function handleSortByUpdate() {
-        store.handleSortByUpdate();
+        store.setSort(1, store.idNamePairs);
         setMenuAnchor(null);
     }
 
     function handleSortByName() {
-        store.sortByName();
+        store.setSort(2, store.idNamePairs);
         setMenuAnchor(null);
     }
 
     async function handleChangeView(index) {
+        setSearchText("");
         store.changeView(index);
+    }
+
+    function handleSearchKeyPress(event) {
+        if(event.code === "Enter")
+        {
+            store.closeCurrentList();
+            switch(store.currentView) {
+                case 0:
+                    store.searchHome(searchText);
+                    break;
+                case 1:
+                    store.searchByPlaylist(searchText);
+                    break;
+                case 2:
+                    store.searchByUser(searchText);
+                    break;
+            }
+        }
+    }
+
+    function handleSearchChange(event) {
+        setSearchText(event.target.value);
     }
 
     let listCard = "";
@@ -179,7 +203,14 @@ const HomeScreen = () => {
                     <IconButton onClick={() => {handleChangeView(2)}} color={store.currentView == 2? "primary" : "default"}>
                         <PersonIcon sx={{fontSize: 40}}/>
                     </IconButton>
-                    <TextField id="outlined-basic" label="Search" variant="outlined" sx={{marginLeft:"10%", width: "50%"}}/>
+                    <TextField
+                        value={searchText}
+                        onChange={handleSearchChange}
+                        onKeyPress={handleSearchKeyPress}
+                        id="outlined-basic"
+                        label="Search"
+                        variant="outlined"
+                        sx={{marginLeft:"10%", width: "50%"}}/>
                     <Typography sx={{marginLeft: "15%"}}>Sort By</Typography>
                     <IconButton onClick={(e) => {setMenuAnchor(e.currentTarget)}}>
                         <SortIcon sx={{fontSize: 40}}/>
@@ -190,9 +221,15 @@ const HomeScreen = () => {
                         open={Boolean(menuAnchor)}
                         onClose={() => {setMenuAnchor(null)}}
                     >
-                        <MenuItem onClick={handleSortByCreate}>By Creation Date (Old-New)</MenuItem>
-                        <MenuItem onClick={handleSortByUpdate}>By Last Edit Date (Old-New)</MenuItem>
-                        <MenuItem onClick={handleSortByName}>By Name (A-Z)</MenuItem>
+                        <MenuItem onClick={handleSortByCreate}>
+                            <Typography color={store.sort == 0? "primary" : "default"}>By Creation Date (Old-New)</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={handleSortByUpdate}>
+                            <Typography color={store.sort == 1? "primary" : "default"}>By Last Edit Date (Old-New)</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={handleSortByName}>
+                            <Typography color={store.sort == 2? "primary" : "default"}>By Name (A-Z)</Typography>
+                        </MenuItem>
                     </Menu>
                 </Box>
 

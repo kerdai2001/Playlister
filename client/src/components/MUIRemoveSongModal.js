@@ -1,8 +1,7 @@
 import { useContext } from 'react'
 import GlobalStoreContext from '../store';
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import { Alert, AlertTitle, Box, Button, Modal } from '@mui/material';
 
 const style = {
     position: 'absolute',
@@ -37,28 +36,30 @@ export default function MUIRemoveSongModal() {
     }
 
     return (
-        <Modal open={true}>
+        <Modal
+            open={true}
+        >
             <Box sx={style}>
-            <div className="modal-dialog">
-                <header className="dialog-header">
-                    Remove {songTitle}
-                </header>
-                <div id="confirm-cancel-container">
-                    <div className="modal-center-content">
-                        Are you sure you wish to permanently remove {songTitle} from the playlist?
-                    </div>
-                    <button
-                        id="dialog-yes-button"
-                        className="modal-button"
-                        onClick={handleConfirmRemoveSong}
-                    >Confirm</button>
-                    <button
-                        id="dialog-no-button"
-                        className="modal-button"
-                        onClick={handleCancelRemoveSong}
-                    >Cancel</button>
-                </div>
-            </div>
+                <Alert severity="warning">
+                    <AlertTitle sx={{marginBottom: 3}}>Remove Song?</AlertTitle>
+                    Are you sure you want to remove "<b>{songTitle}</b>" from the playlist?
+                    <Box textAlign='center'>
+                        <Button
+                            variant='contained'
+                            sx={{margin: 2, marginBottom: 0}}
+                            onClick={handleConfirmRemoveSong}
+                            >
+                            Confirm
+                        </Button>
+                        <Button
+                            variant='contained'
+                            sx={{margin: 2, marginBottom: 0}}
+                            onClick={handleCancelRemoveSong}
+                            >
+                            Cancel
+                        </Button>
+                    </Box>
+                </Alert>
             </Box>
         </Modal>
     );

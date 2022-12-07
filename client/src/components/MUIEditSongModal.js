@@ -1,8 +1,7 @@
 import { useContext, useState } from 'react'
 import GlobalStoreContext from '../store';
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import { Alert, AlertTitle, Box, Button, Modal, TextField, Typography } from '@mui/material';
 
 const style = {
     position: 'absolute',
@@ -50,48 +49,46 @@ export default function MUIEditSongModal() {
     return (
         <Modal open={true}>
             <Box sx={style}>
-                <div className="modal-dialog">
-                <header className="dialog-header">
-                    Edit Song
-                </header>
-                <div
-                    id="edit-song-modal-content"
-                    className="modal-center">
-                    <div id="title-prompt" className="modal-prompt">Title:</div>
+                <Alert severity="info">
+                    <AlertTitle sx={{marginBottom: 3}}>Edit Song</AlertTitle>
+                    <Typography>Title: </Typography>
                     <input 
-                        id="edit-song-modal-title-textfield" 
-                        className='modal-textfield' 
-                        type="text" 
-                        defaultValue={title} 
-                        onChange={handleUpdateTitle} />
-                    <div id="artist-prompt" className="modal-prompt">Artist:</div>
+                            id="edit-song-modal-title-textfield" 
+                            className='modal-textfield' 
+                            type="text" 
+                            defaultValue={title} 
+                            onChange={handleUpdateTitle} />
+                    <Typography>Artist: </Typography>
                     <input 
                         id="edit-song-modal-artist-textfield" 
                         className='modal-textfield' 
                         type="text" 
                         defaultValue={artist} 
                         onChange={handleUpdateArtist} />
-                    <div id="you-tube-id-prompt" className="modal-prompt">You Tube Id:</div>
+                    <Typography>YouTube ID: </Typography>
                     <input 
                         id="edit-song-modal-youTubeId-textfield" 
                         className='modal-textfield' 
                         type="text" 
                         defaultValue={youTubeId} 
                         onChange={handleUpdateYouTubeId} />
-                </div>
-                <div id="confirm-cancel-container">
-                    <button
-                        id="dialog-yes-button"
-                        className="modal-button"
-                        onClick={handleConfirmEditSong}
-                    >Confirm</button>
-                    <button
-                        id="dialog-no-button"
-                        className="modal-button"
-                        onClick={handleCancelEditSong}
-                    >Cancel</button>
-                </div>
-            </div>
+                    <Box textAlign='center'>
+                        <Button
+                            variant='contained'
+                            sx={{margin: 2, marginBottom: 0}}
+                            onClick={handleConfirmEditSong}
+                            >
+                            Confirm
+                        </Button>
+                        <Button
+                            variant='contained'
+                            sx={{margin: 2, marginBottom: 0}}
+                            onClick={handleCancelEditSong}
+                            >
+                            Cancel
+                        </Button>
+                    </Box>
+                </Alert>
             </Box>
         </Modal>
     );

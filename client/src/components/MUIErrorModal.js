@@ -27,20 +27,20 @@ export default function MUIErrorModal() {
         >
             <Box sx={style}>
                 <Alert severity="error">
-                    <AlertTitle>Error</AlertTitle>
+                    <AlertTitle sx={{marginBottom: 3}}>Error</AlertTitle>
                     {message}
+                    <Box textAlign='center'>
+                        <Button
+                            variant='contained'
+                            sx={{margin: 2, marginBottom: 0}}
+                            onClick={() => {
+                                store.closeError();
+                            }}
+                            >
+                            Close
+                        </Button>
+                    </Box>
                 </Alert>
-                <Box textAlign='center'>
-                    <Button
-                        variant='contained'
-                        sx={{marginTop: 2}}
-                        onClick={() => {
-                            store.closeError();
-                        }}
-                        >
-                        Close
-                    </Button>
-                </Box>
             </Box>
         </Modal>
     );

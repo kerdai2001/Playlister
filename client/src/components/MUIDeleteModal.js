@@ -1,8 +1,7 @@
 import { useContext } from 'react'
 import GlobalStoreContext from '../store';
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import { Alert, AlertTitle, Box, Button, Modal } from '@mui/material';
 
 const style = {
     position: 'absolute',
@@ -34,23 +33,26 @@ export default function MUIDeleteModal() {
             open={store.listMarkedForDeletion !== null}
         >
             <Box sx={style}>
-                <div className="modal-dialog">
-                <header className="dialog-header">
-                    Delete the {name} Top 5 List?
-                </header>
-                <div id="confirm-cancel-container">
-                    <button
-                        id="dialog-yes-button"
-                        className="modal-button"
-                        onClick={handleDeleteList}
-                    >Confirm</button>
-                    <button
-                        id="dialog-no-button"
-                        className="modal-button"
-                        onClick={handleCloseModal}
-                    >Cancel</button>
-                </div>
-            </div>
+                <Alert severity="warning">
+                    <AlertTitle sx={{marginBottom: 3}}>Delete Playlist?</AlertTitle>
+                    Are you sure you want to delete the "<b>{name}</b>" playlist?
+                    <Box textAlign='center'>
+                        <Button
+                            variant='contained'
+                            sx={{margin: 2, marginBottom: 0}}
+                            onClick={handleDeleteList}
+                            >
+                            Confirm
+                        </Button>
+                        <Button
+                            variant='contained'
+                            sx={{margin: 2, marginBottom: 0}}
+                            onClick={handleCloseModal}
+                            >
+                            Cancel
+                        </Button>
+                    </Box>
+                </Alert>
             </Box>
         </Modal>
     );

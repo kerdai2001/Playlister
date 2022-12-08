@@ -67,10 +67,8 @@ function ListCard(props) {
     function handleClick(event) {
         if(event.detail === 1 && !(store.currentList != null && store.currentList._id == idNamePair._id))
             handleLoadList(event, idNamePair._id, false);
-        /*
-        if(event.detail === 2)
+        if(event.detail === 2 && idNamePair.published == "")
             handleToggleEdit(event);
-        */
     }
 
     function handleLike(event) {
@@ -228,7 +226,7 @@ function ListCard(props) {
                 </IconButton>
             </Box>
                 */}
-            {editButton}
+
             <Box>
                 <IconButton
                 onClick={(event) => {handleToggleExpand(event, idNamePair._id, true)}}

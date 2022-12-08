@@ -1140,10 +1140,22 @@ function GlobalStoreContextProvider(props) {
                 store.sortByCreate(list);
                 break;
             case 1:
-                store.sortByUpdate(list);
+                store.sortByPublished(list);
                 break;
             case 2:
+                store.sortByUpdate(list);
+                break;
+            case 3:
                 store.sortByName(list);
+                break;
+            case 4:
+                store.sortByListens(list);
+                break;
+            case 5:
+                store.sortByLikes(list);
+                break;
+            case 6:
+                store.sortByDislikes(list);
                 break;
         }
     }
@@ -1153,6 +1165,16 @@ function GlobalStoreContextProvider(props) {
             function(x, y) {
                 if(x.createdAt < y.createdAt) return -1;
                 if(x.createdAt > y.createdAt) return 1;
+                return 0;
+            }
+        )
+    }
+
+    store.sortByPublished = function(list) {
+        list.sort(
+            function(x, y) {
+                if(Date.parse(x.published) < Date.parse(y.published)) return -1;
+                if(Date.parse(x.published) > Date.parse(y.published)) return 1;
                 return 0;
             }
         )
@@ -1173,6 +1195,36 @@ function GlobalStoreContextProvider(props) {
             function(x, y) {
                 if(x.name < y.name) return -1;
                 if(x.name > y.name) return 1;
+                return 0;
+            }
+        )
+    }
+
+    store.sortByListens = function(list) {
+        list.sort(
+            function(x, y) {
+                if(x.listens < y.listens) return 1;
+                if(x.listens > y.listens) return -1;
+                return 0;
+            }
+        )
+    }
+
+    store.sortByLikes = function(list) {
+        list.sort(
+            function(x, y) {
+                if(x.likes < y.likes) return 1;
+                if(x.likes > y.likes) return -1;
+                return 0;
+            }
+        )
+    }
+
+    store.sortByDislikes = function(list) {
+        list.sort(
+            function(x, y) {
+                if(x.dislikes < y.dislikes) return 1;
+                if(x.dislikes > y.dislikes) return -1;
                 return 0;
             }
         )

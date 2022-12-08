@@ -20,7 +20,21 @@ function Statusbar() {
     let text ="";
     if (store.currentList)
         text = <Typography variant="h4">{store.currentList.name}</Typography>
-    else if(!store.isGuest() && store.currentView == 0)
+    else if(store.currentView == 1)
+    {
+        if(store.search != "")
+        {
+            text = <Typography variant="h4">{store.search} Playlists</Typography>
+        }
+    }
+    else if(store.currentView == 2)
+    {
+        if(store.search != "")
+        {
+            text = <Typography variant="h4">{store.search} Lists</Typography>
+        }
+    }
+    else if(store.currentView == 0)
     {
         text =
             <div id="list-selector-heading">

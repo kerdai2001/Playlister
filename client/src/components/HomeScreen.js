@@ -54,18 +54,8 @@ const HomeScreen = () => {
         setCommentText(event.target.value);
     }
 
-    function handleSortByCreate() {
-        store.setSort(0, store.idNamePairs);
-        setMenuAnchor(null);
-    }
-
-    function handleSortByUpdate() {
-        store.setSort(1, store.idNamePairs);
-        setMenuAnchor(null);
-    }
-
-    function handleSortByName() {
-        store.setSort(2, store.idNamePairs);
+    function handleSort(index) {
+        store.setSort(index, store.idNamePairs);
         setMenuAnchor(null);
     }
 
@@ -221,14 +211,26 @@ const HomeScreen = () => {
                         open={Boolean(menuAnchor)}
                         onClose={() => {setMenuAnchor(null)}}
                     >
-                        <MenuItem onClick={handleSortByCreate}>
+                        <MenuItem onClick={() => handleSort(0)}>
                             <Typography color={store.sort == 0? "primary" : "default"}>By Creation Date (Old-New)</Typography>
                         </MenuItem>
-                        <MenuItem onClick={handleSortByUpdate}>
-                            <Typography color={store.sort == 1? "primary" : "default"}>By Last Edit Date (Old-New)</Typography>
+                        <MenuItem onClick={() => handleSort(1)}>
+                            <Typography color={store.sort == 1? "primary" : "default"}>By Publish Date (Old-New)</Typography>
                         </MenuItem>
-                        <MenuItem onClick={handleSortByName}>
-                            <Typography color={store.sort == 2? "primary" : "default"}>By Name (A-Z)</Typography>
+                        <MenuItem onClick={() => handleSort(2)}>
+                            <Typography color={store.sort == 2? "primary" : "default"}>By Last Edit Date (Old-New)</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={() => handleSort(3)}>
+                            <Typography color={store.sort == 3? "primary" : "default"}>By Name (A-Z)</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={() => handleSort(4)}>
+                            <Typography color={store.sort == 4? "primary" : "default"}>By Listens (High-Low)</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={() => handleSort(5)}>
+                            <Typography color={store.sort == 5? "primary" : "default"}>By Likes (High-Low)</Typography>
+                        </MenuItem>
+                        <MenuItem onClick={() => handleSort(6)}>
+                            <Typography color={store.sort == 6? "primary" : "default"}>By Dislikes (High-Low)</Typography>
                         </MenuItem>
                     </Menu>
                 </Box>

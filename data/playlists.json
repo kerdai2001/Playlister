@@ -1,0 +1,189 @@
+[{
+  "_id": {
+    "$oid": "639170ced4afc21d30d1eba8"
+  },
+  "name": "Gaming Mix",
+  "songs": [
+    {
+      "_id": {
+        "$oid": "63917122d4afc21d30d1ebd1"
+      },
+      "title": "Explorers",
+      "artist": "Hinkik",
+      "youTubeId": "fc1tg9qkGyI"
+    },
+    {
+      "_id": {
+        "$oid": "63917122d4afc21d30d1ebd2"
+      },
+      "title": "Last Dance",
+      "artist": "Xomu",
+      "youTubeId": "rFl5aK6n_FQ"
+    },
+    {
+      "_id": {
+        "$oid": "63917122d4afc21d30d1ebd3"
+      },
+      "title": "Endeavours",
+      "artist": "MitiS",
+      "youTubeId": "Tgokaw2ZOoA"
+    }
+  ],
+  "ownerEmail": "fred@email.com",
+  "comments": [],
+  "userName": "fred",
+  "published": "Dec 5, 2022",
+  "likes": 0,
+  "dislikes": 0,
+  "listens": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1670475982175"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1670476359782"
+    }
+  },
+  "__v": 9
+},{
+  "_id": {
+    "$oid": "6391712ed4afc21d30d1ebd9"
+  },
+  "name": "Electronic",
+  "songs": [
+    {
+      "_id": {
+        "$oid": "6391717dd4afc21d30d1ec02"
+      },
+      "title": "Viora",
+      "artist": "Reol",
+      "youTubeId": "qFZJFtf0_fY"
+    },
+    {
+      "_id": {
+        "$oid": "6391717dd4afc21d30d1ec03"
+      },
+      "title": "Personalizer",
+      "artist": "Taishi",
+      "youTubeId": "QZWmkXC-81g"
+    },
+    {
+      "_id": {
+        "$oid": "6391717dd4afc21d30d1ec04"
+      },
+      "title": "インドア系ならトラックメイカー",
+      "artist": "Yunomi",
+      "youTubeId": "su0FCBRwVpE"
+    }
+  ],
+  "ownerEmail": "fred@email.com",
+  "comments": [],
+  "userName": "fred",
+  "published": "",
+  "likes": 0,
+  "dislikes": 0,
+  "listens": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1670476078020"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1670476157338"
+    }
+  },
+  "__v": 6
+},{
+  "_id": {
+    "$oid": "63917272d4afc21d30d1ec8c"
+  },
+  "name": "Rock",
+  "songs": [
+    {
+      "_id": {
+        "$oid": "639172fcd4afc21d30d1ecc9"
+      },
+      "title": "Continue",
+      "artist": "TRiDENT",
+      "youTubeId": "azQVVhMUz58"
+    },
+    {
+      "_id": {
+        "$oid": "639172fcd4afc21d30d1ecca"
+      },
+      "title": "1,000,000 Times",
+      "artist": "My First Story",
+      "youTubeId": "OMrkUUNvM48"
+    },
+    {
+      "_id": {
+        "$oid": "639172fcd4afc21d30d1eccb"
+      },
+      "title": "Bios",
+      "artist": "Guilty Crown",
+      "youTubeId": "UMCka_vXtL4"
+    }
+  ],
+  "ownerEmail": "jen@email.com",
+  "comments": [],
+  "userName": "jen",
+  "published": "Dec 6, 2022",
+  "likes": 0,
+  "dislikes": 0,
+  "listens": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1670476402058"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1670476613324"
+    }
+  },
+  "__v": 7
+},{
+  "_id": {
+    "$oid": "63917277d4afc21d30d1eca0"
+  },
+  "name": "Piano",
+  "songs": [
+    {
+      "_id": {
+        "$oid": "63917331d4afc21d30d1ecdb"
+      },
+      "title": "A Little Story",
+      "artist": "Valentin",
+      "youTubeId": "nmlPwCv-qY4"
+    },
+    {
+      "_id": {
+        "$oid": "63917331d4afc21d30d1ecdc"
+      },
+      "title": "ワスレナグサ",
+      "artist": "まんぼう二等兵",
+      "youTubeId": "NHfopv9no38"
+    }
+  ],
+  "ownerEmail": "jen@email.com",
+  "comments": [],
+  "userName": "jen",
+  "published": "",
+  "likes": 0,
+  "dislikes": 0,
+  "listens": 0,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1670476407312"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1670476593349"
+    }
+  },
+  "__v": 4
+}]

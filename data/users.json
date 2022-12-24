@@ -1,0 +1,57 @@
+[{
+  "_id": {
+    "$oid": "639170bfd4afc21d30d1eb9d"
+  },
+  "playlists": [
+    {
+      "$oid": "639170ced4afc21d30d1eba8"
+    },
+    {
+      "$oid": "6391712ed4afc21d30d1ebd9"
+    }
+  ],
+  "userName": "fred",
+  "firstName": "Fred",
+  "lastName": "Claymore",
+  "email": "fred@email.com",
+  "passwordHash": "$2a$10$MBxkQCOIVUX22g1sIhQHxu0aOFY9ClWR0dxI/SsNlhnFIxnjdO8v.",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1670475967343"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1670476343266"
+    }
+  },
+  "__v": 4
+},{
+  "_id": {
+    "$oid": "63917264d4afc21d30d1ec80"
+  },
+  "playlists": [
+    {
+      "$oid": "63917272d4afc21d30d1ec8c"
+    },
+    {
+      "$oid": "63917277d4afc21d30d1eca0"
+    }
+  ],
+  "userName": "jen",
+  "firstName": "Jennifer",
+  "lastName": "Anderson",
+  "email": "jen@email.com",
+  "passwordHash": "$2a$10$pvyZt1GfZtwrDxoK/QOmZeCSDLIAqGqO5ie1.oG8kpw5pmKvDiuau",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1670476388037"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1670476407309"
+    }
+  },
+  "__v": 2
+}]
